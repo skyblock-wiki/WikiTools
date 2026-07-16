@@ -9,55 +9,50 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.phys.HitResult;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class FacingBlockSkullFinder implements FindFacingBlockSkull {
     @Override
-    public Optional<Skull> findFacingSkull() {
-        Optional<BlockEntity> blockEntity = findFacingBlock();
-
-        if (blockEntity.isEmpty()) {
-            return Optional.empty(); // Cannot find block entity
-        }
-
-        return getSkull(blockEntity.get());
+    @Nullable
+    public Skull findFacingSkull() {
+        BlockEntity blockEntity = findFacingBlock();
+        return blockEntity == null ? null : getSkull(blockEntity);
     }
 
-    private static @NotNull Optional<BlockEntity> findFacingBlock() {
+    @Nullable
+    private static BlockEntity findFacingBlock() {
         Minecraft client = Minecraft.getInstance();
 
         HitResult crosshairTarget = client.hitResult;
 
-        if (crosshairTarget == null ||
-                !crosshairTarget.getType().equals(HitResult.Type.BLOCK)) {
-            return Optional.empty(); // No mouseover block
+        if (crosshairTarget == null || !crosshairTarget.getType().equals(HitResult.Type.BLOCK)) {
+            return null; // No mouseover block
         }
 
         if (client.level == null) {
-            return Optional.empty(); // No world
+            return null; // No world
         }
 
         if (!client.isSameThread()) {
-            return Optional.empty(); // Not on thread
+            return null; // Not on thread
         }
 
         BlockPos blockPos = BlockPos.containing(crosshairTarget.getLocation());
-        BlockEntity blockEntity = client.level.getBlockEntity(blockPos);
-
-        return Optional.ofNullable(blockEntity);
+        return client.level.getBlockEntity(blockPos);
     }
 
-    private static @NotNull Optional<Skull> getSkull(BlockEntity blockEntity) {
+    @Nullable
+    private static Skull getSkull(BlockEntity blockEntity) {
         if (!(blockEntity instanceof SkullBlockEntity)) {
-            return Optional.empty(); // Not a skull
+            return null; // Not a skull
         }
 
         ResolvableProfile profileComponent = ((SkullBlockEntity) blockEntity).getOwnerProfile();
         if (profileComponent == null) {
-            return Optional.empty(); // Cannot find profile
+            return null; // Cannot find profile
         }
 
         GameProfile partialProfile = profileComponent.partialProfile();
@@ -74,11 +69,10 @@ public class FacingBlockSkullFinder implements FindFacingBlockSkull {
         }
 
         if (textureProperty.isEmpty()) {
-            return Optional.empty(); // Cannot find textures
+            return null; // Cannot find textures
         }
 
         String textureValue = textureProperty.get().value();
-
-        return Optional.of(Skull.ofTextureValue(textureValue));
+        return Skull.ofTextureValue(textureValue);
     }
 }

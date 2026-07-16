@@ -1,7 +1,8 @@
 package org.hsw.wikitools.feature.copy_opened_ui;
 
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public interface FindOpenedChestContainer {
-    Optional<ChestContainer> findCurrentChestContainer();
+    @Nullable
+    ChestContainer findCurrentChestContainer();
 }

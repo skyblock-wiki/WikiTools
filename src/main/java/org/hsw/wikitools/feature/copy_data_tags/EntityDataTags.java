@@ -1,20 +1,19 @@
 package org.hsw.wikitools.feature.copy_data_tags;
 
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityDataTags {
-    public final String serialized;
 
-    public EntityDataTags(String serializedDataTags, Optional<String> gameProfileProperties) {
+    public static String getEntityDataTags(String serializedDataTags, @Nullable String gameProfileProperties) {
         validateSerializedDataTags(serializedDataTags);
 
-        if (gameProfileProperties.isPresent()) {
-            serializedDataTags = insertCustomStringDataTag(serializedDataTags, "__gameProfile", gameProfileProperties.get());
+        if (gameProfileProperties != null) {
+            serializedDataTags = insertGameProfileDataTag(serializedDataTags, gameProfileProperties);
         }
 
         validateSerializedDataTags(serializedDataTags);
 
-        this.serialized = serializedDataTags;
+        return serializedDataTags;
     }
 
     private static void validateSerializedDataTags(String serializedDataTags) {
@@ -22,16 +21,13 @@ public class EntityDataTags {
         assert serializedDataTags.endsWith("}");
     }
 
-    private static String insertCustomStringDataTag(String serializedDataTags, String tag, String content) {
+    private static String insertGameProfileDataTag(String serializedDataTags, String gameProfileProperties) {
         validateSerializedDataTags(serializedDataTags);
 
         String withoutClosingBrace = serializedDataTags.substring(0, serializedDataTags.length() - 1);
-        StringBuilder sb = new StringBuilder();
-        sb.append(withoutClosingBrace).append(",");
-        sb.append(tag).append(":").append(content);
-        sb.append("}");
+        String sb = withoutClosingBrace + ",__gameProfile:" + gameProfileProperties + "}";
 
         validateSerializedDataTags(serializedDataTags);
-        return sb.toString();
+        return sb;
     }
 }

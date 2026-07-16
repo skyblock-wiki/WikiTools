@@ -13,32 +13,27 @@ public class GetNewVersionHandler {
         this.findModVersion = findModVersion;
     }
 
-    public CompletableFuture<GetNewVersionResponse> getNewVersion(GetNewVersionRequest request) {
+    public CompletableFuture<GetNewVersionResponse> getNewVersion(String currentVersionName) {
         return CompletableFuture.supplyAsync(() -> {
-            String currentVersionName = request.currentVersion;
             Optional<Version> currentVersion = getVersion(currentVersionName);
-            if (!currentVersion.isPresent()) {
+            if (currentVersion.isEmpty()) {
                 return GetNewVersionResponse.failure("Version Parse Failure (" + currentVersionName + ")");
             }
 
             FindModVersion.FindModVersionResult latestVersionResult = findModVersion.findLatestVersion();
-            if (!latestVersionResult.success || !latestVersionResult.version.isPresent()) {
-                return GetNewVersionResponse.failure(latestVersionResult.message.orElse("Unknown Error"));
+            if (!latestVersionResult.success || latestVersionResult.version.isEmpty()) {
+                return GetNewVersionResponse.failure(latestVersionResult.message != null ? latestVersionResult.message : "Unknown Error");
             }
 
-            String latestVersionName = latestVersionResult.version.get();
+            String latestVersionName = latestVersionResult.version;
 
             Optional<Version> latestVersion = getVersion(latestVersionName);
-            if (!latestVersion.isPresent()) {
-                return GetNewVersionResponse.failure("Version Parse Failure (" + latestVersionName + ")");
-            }
-
-            return GetNewVersionResponse.success(
+            return latestVersion.map(version -> GetNewVersionResponse.success(
                     new GetNewVersionResult(
-                            checkIfModNeedsUpdating(currentVersion.get(), latestVersion.get()),
-                            latestVersion.get().toString()
+                            checkIfModNeedsUpdating(currentVersion.get(), version),
+                            version.toString()
                     )
-            );
+            )).orElseGet(() -> GetNewVersionResponse.failure("Version Parse Failure (" + latestVersionName + ")"));
         });
     }
 
@@ -59,24 +54,7 @@ public class GetNewVersionHandler {
         return Version.tryParse(versionName);
     }
 
-    public static class GetNewVersionRequest {
-        public final String currentVersion;
-
-        public GetNewVersionRequest(String currentVersion) {
-            this.currentVersion = currentVersion;
-        }
-    }
-
-    public static class GetNewVersionResponse {
-        public final boolean success;
-        public final Optional<String> message;
-        public final Optional<GetNewVersionResult> result;
-
-        public GetNewVersionResponse(boolean success, Optional<String> message, Optional<GetNewVersionResult> result) {
-            this.success = success;
-            this.message = message;
-            this.result = result;
-        }
+    public record GetNewVersionResponse(boolean success, Optional<String> message, Optional<GetNewVersionResult> result) {
 
         public static GetNewVersionResponse success(GetNewVersionResult result) {
             return new GetNewVersionResponse(true, Optional.empty(), Optional.of(result));
@@ -87,14 +65,7 @@ public class GetNewVersionHandler {
         }
     }
 
-    public static class GetNewVersionResult {
-        public final boolean hasNewRelease;
-        public final String latestVersion;
+    public record GetNewVersionResult(boolean hasNewRelease, String latestVersion) {
 
-        public GetNewVersionResult(boolean hasNewRelease, String latestVersion) {
-            this.hasNewRelease = hasNewRelease;
-            this.latestVersion = latestVersion;
-        }
     }
-
 }

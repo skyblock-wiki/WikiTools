@@ -12,30 +12,29 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.storage.TagValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-public class FacingBlockDataTagsFinder implements FindFacingBlockDataTags {
+public class FacingBlockEntityDataTagsFinder implements FindFacingBlockEntityDataTags {
     @Override
-    public Optional<EntityDataTags> findFacingBlockDataTags() {
+    public String findFacingBlockEntityDataTags() {
         Minecraft client = Minecraft.getInstance();
 
         if (client.level == null) {
-            return Optional.empty();
+            return null;
         }
 
         if (client.hitResult == null) {
-            return Optional.empty();
+            return null;
         }
-
 
         BlockHitResult blockHitResult = (BlockHitResult)client.hitResult;
         BlockPos blockPos = blockHitResult.getBlockPos();
         BlockEntity targetedBlockEntity = client.level.getBlockEntity(blockPos);
 
         if (targetedBlockEntity == null) {
-            return Optional.empty();
+            return null;
         }
 
         TagValueOutput tagValueOutput = TagValueOutput.createWithoutContext(new ProblemReporter.ScopedCollector(LogUtils.getLogger()));
@@ -43,21 +42,20 @@ public class FacingBlockDataTagsFinder implements FindFacingBlockDataTags {
 
         String data = tagValueOutput.buildResult().toString();
 
-        Optional<String> textureValue = findGameProfile(targetedBlockEntity);
-
-        EntityDataTags entityDataTags = new EntityDataTags(data, textureValue);
-        return Optional.of(entityDataTags);
+        String possibleTextureValue = findGameProfile(targetedBlockEntity);
+        return EntityDataTags.getEntityDataTags(data, possibleTextureValue);
     }
 
-    private static Optional<String> findGameProfile(BlockEntity blockEntity) {
+    @Nullable
+    private static String findGameProfile(BlockEntity blockEntity) {
         if (!(blockEntity instanceof SkullBlockEntity)) {
-            return Optional.empty(); // Not a player head
+            return null; // Not a player head
         }
 
         ResolvableProfile resolvableProfile = ((SkullBlockEntity) blockEntity).getOwnerProfile();
 
         if (resolvableProfile == null) {
-            return Optional.empty();
+            return null;
         }
 
         try {
@@ -66,13 +64,10 @@ public class FacingBlockDataTagsFinder implements FindFacingBlockDataTags {
             GameProfile fullProfile = resolvableProfile.resolveProfile(profileResolver).get();
             PropertyMap propertyMap = fullProfile.properties();
 
-//        // Extract texture value
-//        Optional<String> textureValue = propertyMap.get("textures").stream().findFirst().map(Property::value);
-
-            return Optional.of(propertyMap.toString());
+            return propertyMap.toString();
         } catch (InterruptedException | ExecutionException ignored) {
         }
 
-        return Optional.empty();
+        return null;
     }
 }

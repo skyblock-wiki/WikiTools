@@ -15,8 +15,6 @@ import net.minecraft.network.chat.Style;
 import org.hsw.wikitools.common.ClipboardHelper;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Optional;
-
 import static org.hsw.wikitools.ModProperties.CATEGORY;
 
 public class CopyHoveredItemTooltipListener {
@@ -25,10 +23,7 @@ public class CopyHoveredItemTooltipListener {
 
     public CopyHoveredItemTooltipListener(GetItemTooltipHandler getItemTooltipHandler) {
         this.getItemTooltipHandler = getItemTooltipHandler;
-
         this.copyTooltipKeyBinding = registerKeyBinding();
-
-        registerEvent();
     }
 
      private KeyMapping registerKeyBinding() {
@@ -40,19 +35,17 @@ public class CopyHoveredItemTooltipListener {
          ));
      }
 
-    private void registerEvent() {
+     public void registerEvent() {
         // Add a listener for screen events (when a screen is opened)
         // to add a keyboard event listener for the HandledScreen
 
-        ScreenEvents.BEFORE_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
+        ScreenEvents.BEFORE_INIT.register((client, screen, _, _) -> {
             // Add a listener for keyboard events if the screen is a HandledScreen
-
-            if (!(screen instanceof AbstractContainerScreen<?>)) {
-                return; // Only register for InventoryScreen
+            if (screen instanceof AbstractContainerScreen<?>) {
+                ScreenKeyboardEvents.afterKeyPress(screen).register((_, keyInput) -> onKeyPress(client, keyInput));
             }
-
-            ScreenKeyboardEvents.afterKeyPress(screen).register((screen1, keyInput) -> onKeyPress(client, keyInput));
         });
+
     }
 
     private void onKeyPress(Minecraft client, KeyEvent keyInput) {
@@ -68,13 +61,12 @@ public class CopyHoveredItemTooltipListener {
     }
 
     private void copyTooltipAsTemplateCall(Minecraft client) {
-        Optional<GetItemTooltipHandler.GetItemTooltipResponse> tooltip =
-                getItemTooltipHandler.getInventorySlotTemplateCall(new GetItemTooltipHandler.GetItemTooltipRequest());
-        if (tooltip.isEmpty()) {
+        String tooltip = getItemTooltipHandler.getInventorySlotTemplateCall();
+        if (tooltip == null) {
             return; // No tooltip to copy
         }
-        String stringToCopy = tooltip.get().tooltip;
-        ClipboardHelper.setClipboard(stringToCopy);
+
+        ClipboardHelper.setClipboard(tooltip);
 
         MutableComponent formattingModeTip = Component.literal("(◕‿◕)").setStyle(
                 Style.EMPTY.withHoverEvent(new HoverEvent.ShowText(Component.translatable(
@@ -85,14 +77,12 @@ public class CopyHoveredItemTooltipListener {
     }
 
     private void copyTooltipAsModuleData(Minecraft client) {
-        Optional<GetItemTooltipHandler.GetItemTooltipResponse> tooltip =
-                getItemTooltipHandler.getTooltipModuleDataItem(new GetItemTooltipHandler.GetItemTooltipRequest());
-
-        if (tooltip.isEmpty()) {
+        String tooltip = getItemTooltipHandler.getTooltipModuleDataItem();
+        if (tooltip == null) {
             return; // No tooltip to copy
         }
-        String stringToCopy = tooltip.get().tooltip;
-        ClipboardHelper.setClipboard(stringToCopy);
+
+        ClipboardHelper.setClipboard(tooltip);
 
         MutableComponent formattingModeTip = Component.literal("(◕‿◕)").setStyle(
                 Style.EMPTY.withHoverEvent(new HoverEvent.ShowText(Component.translatable(

@@ -18,12 +18,10 @@ public class ModUpdateChecker {
 
     public ModUpdateChecker(GetNewVersionHandler getNewVersionHandler) {
         this.getNewVersionHandler = getNewVersionHandler;
-
-        registerEvent();
     }
 
-    private void registerEvent() {
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+    public void registerEvent() {
+        ClientPlayConnectionEvents.JOIN.register((_, _, client) -> {
             var isSelfJoin = client.player == Minecraft.getInstance().player;
             var isSinglePlayer = client.hasSingleplayerServer();
 
@@ -42,16 +40,15 @@ public class ModUpdateChecker {
         ranOnceAfterClientLaunch = true;
 
         String currentVersionName = ModProperties.MOD_VERSION;
-        getNewVersionHandler.getNewVersion(
-                new GetNewVersionHandler.GetNewVersionRequest(currentVersionName))
+        getNewVersionHandler.getNewVersion(currentVersionName)
                 .thenAccept((response) -> {
-                    if (!response.success || response.result.isEmpty()) {
-                        warnFailure(response.message.orElse("Unknown error"));
+                    if (!response.success() || response.result().isEmpty()) {
+                        warnFailure(response.message().orElse("Unknown error"));
                         return;
                     }
 
-                    if (response.result.get().hasNewRelease) {
-                        remindUserToUpdateMod(response.result.get().latestVersion);
+                    if (response.result().get().hasNewRelease()) {
+                        remindUserToUpdateMod(response.result().get().latestVersion());
                     }
                 });
     }

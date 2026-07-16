@@ -7,39 +7,37 @@ import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.TagValueOutput;
-
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class FacingEntityDataTagsFinder implements FindFacingEntityDataTags {
     @Override
-    public Optional<EntityDataTags> findFacingEntityDataTags() {
+    @Nullable
+    public String findFacingEntityDataTags() {
         Minecraft client = Minecraft.getInstance();
         Entity targetedEntity = client.crosshairPickEntity;
 
         if (targetedEntity == null) {
-            return Optional.empty(); // No mouseover entity
+            return null; // No mouseover entity
         }
 
         TagValueOutput tagValueOutput = TagValueOutput.createWithoutContext(new ProblemReporter.ScopedCollector(LogUtils.getLogger()));
         targetedEntity.saveWithoutId(tagValueOutput);
         String data = tagValueOutput.buildResult().toString();
 
-        Optional<String> textureValue = findGameProfile(targetedEntity);
+        String possibleTextureValue = findGameProfile(targetedEntity);
 
-        EntityDataTags entityDataTags = new EntityDataTags(data, textureValue);
-        return Optional.of(entityDataTags);
+        return EntityDataTags.getEntityDataTags(data, possibleTextureValue);
     }
 
-    private static Optional<String> findGameProfile(Entity entity) {
+    @Nullable
+    private static String findGameProfile(Entity entity) {
         if (!(entity instanceof Player)) {
-            return Optional.empty(); // Not a player entity
+            return null; // Not a player entity
         }
 
         PropertyMap propertyMap = ((Player) entity).getGameProfile().properties();
-
-//        // Extract texture value
-//        Optional<String> textureValue = propertyMap.get("textures").stream().findFirst().map(Property::value);
-
-        return Optional.of(propertyMap.toString());
+        return propertyMap.toString();
+        // Extract texture value
+        // Optional<String> textureValue = propertyMap.get("textures").stream().findFirst().map(Property::value);
     }
 }

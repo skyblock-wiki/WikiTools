@@ -1,16 +1,17 @@
 package org.hsw.wikitools.feature.copy_opened_ui;
 
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class OpenedChestContainerFinderStub implements FindOpenedChestContainer {
-    private final Optional<ChestContainer> chestContainer;
+    @Nullable
+    private final ChestContainer chestContainer;
 
-    public OpenedChestContainerFinderStub(Optional<ChestContainer> chestContainer) {
+    public OpenedChestContainerFinderStub(@Nullable ChestContainer chestContainer) {
         this.chestContainer = chestContainer;
     }
 
     @Override
-    public Optional<ChestContainer> findCurrentChestContainer() {
+    public ChestContainer findCurrentChestContainer() {
         return chestContainer;
     }
 }

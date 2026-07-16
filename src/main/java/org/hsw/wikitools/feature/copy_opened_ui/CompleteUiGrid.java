@@ -1,5 +1,7 @@
 package org.hsw.wikitools.feature.copy_opened_ui;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +12,11 @@ class CompleteUiGrid {
 
     public final List<List<Optional<UiTemplateItem>>> itemGrid;
 
-    public final Optional<UiTemplateItem> uniqueCloseItem;
-    public final Optional<UiTemplateItem> uniqueGoBackItem;
+    @Nullable
+    public final UiTemplateItem uniqueCloseItem;
+
+    @Nullable
+    public final UiTemplateItem uniqueGoBackItem;
 
     public CompleteUiGrid(int numRows, int numCols, List<List<Optional<UiTemplateItem>>> itemGrid)
             throws InvalidChestContentException {
@@ -53,7 +58,8 @@ class CompleteUiGrid {
         itemGrid.get(rowIndex).set(colIndex, Optional.empty());
     }
 
-    private Optional<UiTemplateItem> popUniqueCloseItemIfExists() {
+    @Nullable
+    private UiTemplateItem popUniqueCloseItemIfExists() {
         int numberOfValidCloses = 0;
         Optional<UiTemplateItem> uniqueValidClose = Optional.empty();
 
@@ -68,10 +74,11 @@ class CompleteUiGrid {
         }
 
         uniqueValidClose.ifPresent(uiTemplateItem -> clearGridCell(uiTemplateItem.rowIndex, uiTemplateItem.colIndex));
-        return uniqueValidClose;
+        return uniqueValidClose.orElse(null);
     }
 
-    private Optional<UiTemplateItem> popUniqueGoBackItemIfExists() {
+    @Nullable
+    private UiTemplateItem popUniqueGoBackItemIfExists() {
         int numberOfValidGoBacks = 0;
         Optional<UiTemplateItem> uniqueValidGoBack = Optional.empty();
 
@@ -86,6 +93,6 @@ class CompleteUiGrid {
         }
 
         uniqueValidGoBack.ifPresent(uiTemplateItem -> clearGridCell(uiTemplateItem.rowIndex, uiTemplateItem.colIndex));
-        return uniqueValidGoBack;
+        return uniqueValidGoBack.orElse(null);
     }
 }

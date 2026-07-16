@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MctextModuleFormatter {
-    private static final String formatTagSymbol = "&";
-    private static final String newlineSymbol = "/";
+public class MinecraftTextModuleFormatter {
+    private static final String FORMAT_TAG_SYMBOL = "&";
+    private static final String NEWLINE_SYMBOL = "/";
 
     public String formatName(String name) {
         boolean removeFormattingCode = true;
@@ -47,10 +47,10 @@ public class MctextModuleFormatter {
     }
 
     private String handleAllEscapes(String text) {
-        Map<String, String> mctextRelatedReplacements = new HashMap<String, String>() {{
+        Map<String, String> mctextRelatedReplacements = new HashMap<>() {{
             put("\\\\", "\\\\\\\\"); // Replace \ with \\
-            put(formatTagSymbol, "\\\\" + formatTagSymbol); // Escape format tag symbol
-            put(newlineSymbol, "\\\\" + newlineSymbol); // Escape newline symbol
+            put(FORMAT_TAG_SYMBOL, "\\\\" + FORMAT_TAG_SYMBOL); // Escape format tag symbol
+            put(NEWLINE_SYMBOL, "\\\\" + NEWLINE_SYMBOL); // Escape newline symbol
         }};
         for (Map.Entry<String, String> entry : mctextRelatedReplacements.entrySet()) {
             text = text.replaceAll(entry.getKey(), entry.getValue());
@@ -65,13 +65,13 @@ public class MctextModuleFormatter {
         }
         else {
             // Replace all color codes (§) with &
-            text = text.replaceAll("§", formatTagSymbol);
+            text = text.replaceAll("§", FORMAT_TAG_SYMBOL);
         }
         return text;
     }
 
     private String handleAllReplacements(String text) {
-        Map<String, String> luaSingleQuotedStringRelatedReplacements = new HashMap<String, String>() {{
+        Map<String, String> luaSingleQuotedStringRelatedReplacements = new HashMap<>() {{
             // Backslash handler: The backslash is an escape character in lua
             // So we need to escape all backslashes again
             put("\\\\", "\\\\\\\\"); // Replace \ with \\

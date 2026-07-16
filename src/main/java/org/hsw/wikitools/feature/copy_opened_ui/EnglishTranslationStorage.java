@@ -1,16 +1,16 @@
 package org.hsw.wikitools.feature.copy_opened_ui;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.ClientLanguage;
+import net.minecraft.client.resources.language.LanguageInfo;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.language.ClientLanguage;
-import net.minecraft.client.resources.language.LanguageInfo;
-import net.minecraft.server.packs.resources.ResourceManager;
 
-class EnglishTranslationStorage {
+public class EnglishTranslationStorage {
     private static @Nullable ClientLanguage translationStorage = null;
 
     public static @NotNull ClientLanguage get() {

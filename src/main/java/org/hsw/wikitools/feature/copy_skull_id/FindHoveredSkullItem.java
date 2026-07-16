@@ -1,7 +1,8 @@
 package org.hsw.wikitools.feature.copy_skull_id;
 
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public interface FindHoveredSkullItem {
-    Optional<Skull> findHoveredSkull();
+    @Nullable
+    Skull findHoveredSkull();
 }

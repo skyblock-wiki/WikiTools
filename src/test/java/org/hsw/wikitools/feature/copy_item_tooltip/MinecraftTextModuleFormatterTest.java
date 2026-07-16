@@ -11,11 +11,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MctextModuleFormatterTest {
+class MinecraftTextModuleFormatterTest {
     @Nested
     class TestEscapeAndReplaceRules {
         private String formatTitle(String input) {
-            MctextModuleFormatter formatter = new MctextModuleFormatter();
+            MinecraftTextModuleFormatter formatter = new MinecraftTextModuleFormatter();
             return formatter.formatTitle(input);
         }
 
@@ -67,7 +67,7 @@ class MctextModuleFormatterTest {
     @Nested
     class TestsForFormatName {
         private String formatName(String input) {
-            MctextModuleFormatter formatter = new MctextModuleFormatter();
+            MinecraftTextModuleFormatter formatter = new MinecraftTextModuleFormatter();
             return formatter.formatName(input);
         }
 
@@ -87,7 +87,7 @@ class MctextModuleFormatterTest {
     @Nested
     class TestsForFormatTitle {
         private String formatTitle(String input) {
-            MctextModuleFormatter formatter = new MctextModuleFormatter();
+            MinecraftTextModuleFormatter formatter = new MinecraftTextModuleFormatter();
             return formatter.formatTitle(input);
         }
 
@@ -107,7 +107,7 @@ class MctextModuleFormatterTest {
     @Nested
     class TestsForFormatLore {
         private String formatLore(List<String> input) {
-            MctextModuleFormatter formatter = new MctextModuleFormatter();
+            MinecraftTextModuleFormatter formatter = new MinecraftTextModuleFormatter();
             return formatter.formatLore(input);
         }
 

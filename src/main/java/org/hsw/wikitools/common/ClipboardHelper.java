@@ -10,11 +10,4 @@ public class ClipboardHelper {
         ClipboardManager clipboard = new ClipboardManager();
         clipboard.setClipboard(window, text);
     }
-
-    public static String getClipboard() {
-        Window window = Minecraft.getInstance().getWindow();
-        ClipboardManager clipboard = new ClipboardManager();
-
-        return clipboard.getClipboard(window, (ret, args) -> {});
-    }
 }

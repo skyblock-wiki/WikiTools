@@ -79,7 +79,7 @@ class MctextTemplateFormatterTest {
     @Nested
     class TestSpecialEscapeRules {
         private String formatNameForUi(String input) {
-            MctextTemplateFormatter formatter = new MctextTemplateFormatter(new HashMap<String, String>() {{
+            MctextTemplateFormatter formatter = new MctextTemplateFormatter(new HashMap<>() {{
                 put(",", "\\\\,");  // Replace , with \,
             }});
             return formatter.formatName(input);

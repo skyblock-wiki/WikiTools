@@ -1,7 +1,8 @@
 package org.hsw.wikitools.feature.copy_data_tags;
 
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public interface FindHoveredItemDataTags {
-    Optional<ItemDataTags> findHoveredItemDataTags();
+    @Nullable
+    String findHoveredItemDataTags();
 }

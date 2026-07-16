@@ -10,23 +10,23 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import org.hsw.wikitools.mixin.common.HandledScreenAccessor;
-
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class HoveredItemIdFinder {
 
-    public Optional<String> findHoveredItemId() {
+    @Nullable
+    public String findHoveredItemId() {
         Minecraft client = Minecraft.getInstance();
         Screen screen = client.gui.screen();
 
         if (!(screen instanceof AbstractContainerScreen<?> handledScreen)) {
-            return Optional.empty(); // Not a handled screen, cannot find hovered item
+            return null; // Not a handled screen, cannot find hovered item
         }
 
         Slot focusedSlot = ((HandledScreenAccessor) handledScreen).getHoveredSlot();
 
         if (focusedSlot == null) {
-            return Optional.empty(); // No focused slot, cannot find hovered item
+            return null; // No focused slot, cannot find hovered item
         }
 
         ItemStack focusedItemStack = focusedSlot.getItem();
@@ -34,22 +34,22 @@ public class HoveredItemIdFinder {
         return getItemIdFromItemStack(focusedItemStack);
     }
 
-    private Optional<String> getItemIdFromItemStack(ItemStack itemStack) {
+    private String getItemIdFromItemStack(ItemStack itemStack) {
         DataComponentMap components = itemStack.getComponents();
 
         CustomData nbtComponent = components.get(DataComponents.CUSTOM_DATA);
 
         if (nbtComponent == null) {
-            return Optional.empty();  // Cannot find custom data component
+            return null;  // Cannot find custom data component
         }
 
         CompoundTag nbtCompound = nbtComponent.copyTag();
 
         if (!nbtCompound.contains("id")) {
-            return Optional.empty();  // Cannot find the key "id" in the custom data component
+            return null;  // Cannot find the key "id" in the custom data component
         }
 
-        return nbtCompound.getString("id");
+        return nbtCompound.getString("id").orElse(null);
     }
 
 }

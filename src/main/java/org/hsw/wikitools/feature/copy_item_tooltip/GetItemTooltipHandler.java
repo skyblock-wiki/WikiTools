@@ -1,44 +1,32 @@
 package org.hsw.wikitools.feature.copy_item_tooltip;
 
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class GetItemTooltipHandler {
-    private final FindHoveredInvslot findHoveredInvslot;
+    private final FindHoveredInventorySlot findHoveredInventorySlot;
 
-    public GetItemTooltipHandler(FindHoveredInvslot findHoveredInvslot) {
-        this.findHoveredInvslot = findHoveredInvslot;
+    public GetItemTooltipHandler(FindHoveredInventorySlot findHoveredInventorySlot) {
+        this.findHoveredInventorySlot = findHoveredInventorySlot;
     }
 
-    public Optional<GetItemTooltipResponse> getInventorySlotTemplateCall(GetItemTooltipRequest request) {
-        Optional<Invslot> invslot = findHoveredInvslot.findHoveredInvslot();
-        if (!invslot.isPresent()) {
-            return Optional.empty();
+    @Nullable
+    public String getInventorySlotTemplateCall() {
+        TooltipInventorySlot inventorySlot = findHoveredInventorySlot.findHoveredInventorySlot();
+        if (inventorySlot == null) {
+            return null;
         }
-        InventorySlotTemplateCall inventorySlotTemplateCall = InventorySlotTemplateCall.of(invslot.get());
-        GetItemTooltipResponse response = new GetItemTooltipResponse(inventorySlotTemplateCall.tooltip);
-        return Optional.of(response);
+
+        InventorySlotTemplateCall inventorySlotTemplateCall = InventorySlotTemplateCall.of(inventorySlot);
+        return inventorySlotTemplateCall.tooltip;
     }
 
-    public Optional<GetItemTooltipResponse> getTooltipModuleDataItem(GetItemTooltipRequest request) {
-        Optional<Invslot> invslot = findHoveredInvslot.findHoveredInvslot();
-        if (!invslot.isPresent()) {
-            return Optional.empty();
+    @Nullable
+    public String getTooltipModuleDataItem() {
+        TooltipInventorySlot inventorySlot = findHoveredInventorySlot.findHoveredInventorySlot();
+        if (inventorySlot == null) {
+            return null;
         }
-        TooltipModuleDataItem tooltipModuleDataItem = TooltipModuleDataItem.of(invslot.get());
-        GetItemTooltipResponse response = new GetItemTooltipResponse(tooltipModuleDataItem.tooltip);
-        return Optional.of(response);
+        TooltipModuleDataItem tooltipModuleDataItem = TooltipModuleDataItem.of(inventorySlot);
+        return tooltipModuleDataItem.tooltip;
     }
-
-    public static class GetItemTooltipRequest {
-        public GetItemTooltipRequest() {}
-    }
-
-    public static class GetItemTooltipResponse {
-        public final String tooltip;
-
-        public GetItemTooltipResponse(String tooltip) {
-            this.tooltip = tooltip;
-        }
-    }
-
 }

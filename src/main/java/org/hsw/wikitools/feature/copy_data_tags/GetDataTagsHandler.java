@@ -1,41 +1,29 @@
 package org.hsw.wikitools.feature.copy_data_tags;
 
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 public class GetDataTagsHandler {
     private final FindHoveredItemDataTags findHoveredItemDataTags;
     private final FindFacingEntityDataTags findFacingEntityDataTags;
-    private final FindFacingBlockDataTags findFacingBlockDataTags;
+    private final FindFacingBlockEntityDataTags findFacingBlockEntityDataTags;
 
-    public GetDataTagsHandler(FindHoveredItemDataTags findHoveredItemDataTags, FindFacingEntityDataTags findFacingEntityDataTags, FindFacingBlockDataTags findFacingBlockDataTags) {
+    public GetDataTagsHandler(FindHoveredItemDataTags findHoveredItemDataTags, FindFacingEntityDataTags findFacingEntityDataTags, FindFacingBlockEntityDataTags findFacingBlockEntityDataTags) {
         this.findHoveredItemDataTags = findHoveredItemDataTags;
         this.findFacingEntityDataTags = findFacingEntityDataTags;
-        this.findFacingBlockDataTags = findFacingBlockDataTags;
+        this.findFacingBlockEntityDataTags = findFacingBlockEntityDataTags;
     }
 
-    public Optional<GetDataTagsResponse> getDataTags(GetDataTagsRequest getDataTagsRequest) {
-        Optional<ItemDataTags> itemDataTags = findHoveredItemDataTags.findHoveredItemDataTags();
-        if (itemDataTags.isPresent()) {
-            return Optional.of(new GetDataTagsResponse(itemDataTags.get().serialized));
+    @Nullable
+    public String getDataTags() {
+        String itemDataTags = findHoveredItemDataTags.findHoveredItemDataTags();
+        if (itemDataTags != null) {
+            return itemDataTags;
         }
-        Optional<EntityDataTags> entityDataTags = findFacingEntityDataTags.findFacingEntityDataTags();
-        if (entityDataTags.isPresent()) {
-            return Optional.of(new GetDataTagsResponse(entityDataTags.get().serialized));
-        }
-        Optional<EntityDataTags> blockDataTags = findFacingBlockDataTags.findFacingBlockDataTags();
-        if (blockDataTags.isPresent()) {
-            return Optional.of(new GetDataTagsResponse(blockDataTags.get().serialized));
-        }
-        return Optional.empty();
-    }
 
-    public static class GetDataTagsRequest {}
-
-    public static class GetDataTagsResponse {
-        public String dataTags;
-
-        public GetDataTagsResponse(String dataTags) {
-            this.dataTags = dataTags;
+        String entityDataTags = findFacingEntityDataTags.findFacingEntityDataTags();
+        if (entityDataTags != null) {
+            return entityDataTags;
         }
+        return findFacingBlockEntityDataTags.findFacingBlockEntityDataTags();
     }
 }

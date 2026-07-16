@@ -14,15 +14,15 @@ import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
 public class GithubLatestReleaseFinderTest {
-    private static final Integer mockServerPort = 1080;
-    private static final String mockServerBaseUrl = "http://localhost:" + mockServerPort;
-    private static final String latestReleasePath = "/repos/skyblock-wiki/wikitools/releases/latest";
+    private static final Integer MOCK_SERVER_PORT = 1080;
+    private static final String MOCK_SERVER_BASE_URL = "http://localhost:" + MOCK_SERVER_PORT;
+    private static final String LATEST_RELEASE_PATH = "/repos/skyblock-wiki/wikitools/releases/latest";
 
     private static ClientAndServer mockServer;
 
     @BeforeAll
     public static void startServer() {
-        mockServer = startClientAndServer(mockServerPort);
+        mockServer = startClientAndServer(MOCK_SERVER_PORT);
     }
 
     @AfterAll
@@ -37,18 +37,18 @@ public class GithubLatestReleaseFinderTest {
         mockServer.when(
                 request()
                         .withMethod("GET")
-                        .withPath(latestReleasePath)
+                        .withPath(LATEST_RELEASE_PATH)
         ).respond(
                 response()
                         .withStatusCode(200)
                         .withBody(responseBody)
         );
 
-        var classUnderTest = new GithubLatestReleaseFinder(mockServerBaseUrl);
+        var classUnderTest = new GithubLatestReleaseFinder(MOCK_SERVER_BASE_URL);
         var result = classUnderTest.findLatestVersion();
         assertTrue(result.success);
-        assertTrue(result.version.isPresent());
-        assertEquals("2.6.6", result.version.get());
+        assertNotNull(result.version);
+        assertEquals("2.6.6", result.version);
     }
 
     @Test
@@ -58,18 +58,18 @@ public class GithubLatestReleaseFinderTest {
         mockServer.when(
                 request()
                         .withMethod("GET")
-                        .withPath(latestReleasePath)
+                        .withPath(LATEST_RELEASE_PATH)
         ).respond(
                 response()
                         .withStatusCode(404)
                         .withBody(responseBody)
         );
 
-        var classUnderTest = new GithubLatestReleaseFinder(mockServerBaseUrl);
+        var classUnderTest = new GithubLatestReleaseFinder(MOCK_SERVER_BASE_URL);
         var result = classUnderTest.findLatestVersion();
         assertFalse(result.success);
-        assertTrue(result.message.isPresent());
-        assertTrue(result.message.get().contains("Not Found"));
+        assertNotNull(result.message);
+        assertTrue(result.message.contains("Not Found"));
     }
 
     private String getTestPayload(String fileName) {

@@ -5,17 +5,17 @@ import org.hsw.wikitools.common.MctextTemplateFormatter;
 import java.util.HashMap;
 
 class InventorySlotTemplateCall {
-    private static final MctextTemplateFormatter itemFormatter = new MctextTemplateFormatter(new HashMap<>());
+    private static final MctextTemplateFormatter ITEM_FORMATTER = new MctextTemplateFormatter(new HashMap<>());
     public final String tooltip;
 
     private InventorySlotTemplateCall(String name, String title, String text) {
         this.tooltip = toTemplateString(name, title, text);
     }
 
-    public static InventorySlotTemplateCall of(Invslot invslot) {
-        String name = itemFormatter.formatName(invslot.name);
-        String title = itemFormatter.formatTitle(invslot.name);
-        String loreString = itemFormatter.formatLore(invslot.lore);
+    public static InventorySlotTemplateCall of(TooltipInventorySlot tooltipInventorySlot) {
+        String name = ITEM_FORMATTER.formatName(tooltipInventorySlot.name);
+        String title = ITEM_FORMATTER.formatTitle(tooltipInventorySlot.name);
+        String loreString = ITEM_FORMATTER.formatLore(tooltipInventorySlot.lore);
 
         return new InventorySlotTemplateCall(name, title, loreString);
     }

@@ -10,14 +10,14 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ModProperties {
-    private static final ConfigReader configReader = new ConfigReader("config.properties");
+    private static final ConfigReader CONFIG_READER = new ConfigReader("config.properties");
 
-    public static final String MOD_ID = configReader.getProperty("MOD_ID");
-    public static final String MOD_VERSION = configReader.getProperty("MOD_VERSION");
+    public static final String MOD_ID = CONFIG_READER.getProperty("MOD_ID");
+    public static final String MOD_VERSION = CONFIG_READER.getProperty("MOD_VERSION");
 
-    public static final String GITHUB_API_BASE_URL = configReader.getProperty("GITHUB_API_BASE_URL");
-    public static final String LATEST_RELEASE_PATH = configReader.getProperty("LATEST_RELEASE_PATH");
-    public static final String LATEST_RELEASE_DOWNLOAD_URL = configReader.getProperty("LATEST_RELEASE_DOWNLOAD_URL");
+    public static final String GITHUB_API_BASE_URL = CONFIG_READER.getProperty("GITHUB_API_BASE_URL");
+    public static final String LATEST_RELEASE_PATH = CONFIG_READER.getProperty("LATEST_RELEASE_PATH");
+    public static final String LATEST_RELEASE_DOWNLOAD_URL = CONFIG_READER.getProperty("LATEST_RELEASE_DOWNLOAD_URL");
 
     public static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(MOD_ID, "main"));
 

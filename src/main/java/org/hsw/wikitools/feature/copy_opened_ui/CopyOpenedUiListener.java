@@ -15,8 +15,6 @@ import net.minecraft.network.chat.Style;
 import org.hsw.wikitools.common.ClipboardHelper;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Optional;
-
 import static org.hsw.wikitools.ModProperties.CATEGORY;
 
 public class CopyOpenedUiListener {
@@ -25,10 +23,7 @@ public class CopyOpenedUiListener {
 
     public CopyOpenedUiListener(GetOpenedUiHandler getOpenedUiHandler) {
         this.getOpenedUiHandler = getOpenedUiHandler;
-
         this.copyOpenedUiKeybinding = registerKeyBinding();
-
-        registerEvent();
     }
 
     private KeyMapping registerKeyBinding() {
@@ -40,18 +35,16 @@ public class CopyOpenedUiListener {
         ));
     }
 
-    private void registerEvent() {
+    public void registerEvent() {
         // Add a listener for screen events (when a screen is opened)
         // to add a keyboard event listener for the HandledScreen
 
-        ScreenEvents.BEFORE_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
+        ScreenEvents.BEFORE_INIT.register((client, screen, _, _) -> {
             // Add a listener for keyboard events if the screen is a HandledScreen
 
-            if (!(screen instanceof AbstractContainerScreen<?>)) {
-                return; // Only register for InventoryScreen
+            if (screen instanceof AbstractContainerScreen<?>) {
+                ScreenKeyboardEvents.afterKeyPress(screen).register((_, keyInput) -> onKeyPress(client, keyInput));
             }
-
-            ScreenKeyboardEvents.afterKeyPress(screen).register((screen1, keyInput) -> onKeyPress(client, keyInput));
         });
     }
 
@@ -70,13 +63,12 @@ public class CopyOpenedUiListener {
                 fillWithBlankByDefault,
                 alwaysUseMcItemNameForNonSkullItems
         );
-        Optional<GetOpenedUiHandler.GetOpenedUiResponse> response = getOpenedUiHandler.getOpenedUiTemplateCall(request);
+        String templateCall = getOpenedUiHandler.getOpenedUiTemplateCall(request);
 
-        if (response.isEmpty()) {
+        if (templateCall == null || templateCall.isEmpty()) {
             return;  // No ui to copy
         }
-        String stringToCopy = response.get().templateCall;
-        ClipboardHelper.setClipboard(stringToCopy);
+        ClipboardHelper.setClipboard(templateCall);
 
         Component tick = Component.literal("(✔)");
         Component cross = Component.literal("(✘)");

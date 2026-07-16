@@ -6,12 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-public class Invslot {
-    private static final HashMap<String, String> uiItemExtraEscapes = new HashMap<String, String>() {{
+public class InventorySlot {
+    private static final HashMap<String, String> UI_ITEM_EXTRA_ESCAPES = new HashMap<>() {{
         put(",", "\\\\,"); // Replace , with \,
     }};
-    private static final MctextTemplateFormatter uiItemFormatter =
-            new MctextTemplateFormatter(uiItemExtraEscapes);
+    private static final MctextTemplateFormatter uiItemFormatter = new MctextTemplateFormatter(UI_ITEM_EXTRA_ESCAPES);
 
     private static final String DEFAULT_BLANK_ITEM_COLOR = "Black";
 
@@ -22,7 +21,7 @@ public class Invslot {
     private final boolean isCustomSkull;
     private final boolean isEnchanted;
 
-    public Invslot(
+    public InventorySlot(
             String displayedName,
             String minecraftItemNameInEnglish,
             List<String> lore,

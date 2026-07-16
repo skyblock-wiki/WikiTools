@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import java.util.Base64;
 
 public class Skull {
-    String textureId;
+    public final String textureId;
 
     private Skull(String textureId) {
         this.textureId = textureId;

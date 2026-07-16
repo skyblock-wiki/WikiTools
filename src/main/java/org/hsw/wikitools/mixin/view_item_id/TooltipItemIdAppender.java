@@ -8,8 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import org.hsw.wikitools.feature.view_item_id.GetItemIdHandler;
-import org.jetbrains.annotations.NotNull;
+import org.hsw.wikitools.feature.view_item_id.HoveredItemIdFinder;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,33 +17,23 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mixin(ItemStack.class)
 public class TooltipItemIdAppender {
     @Inject(method = "getTooltipLines", at = @At("TAIL"), cancellable = true)
-    public void onGetTooltip(Item.TooltipContext context, @Nullable Player player, TooltipFlag type, CallbackInfoReturnable<List<Component>> cir) {
+    public void onGetTooltip(Item.TooltipContext context, @Nullable Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
         boolean toDisplaySkyBlockItemId = Minecraft.getInstance().options.advancedItemTooltips;
 
         if (!toDisplaySkyBlockItemId) {
             return;
         }
 
-        Optional<String> skyBlockItemId = findItemId();
-
-        if (skyBlockItemId.isEmpty()) {
+        String skyBlockItemId = new HoveredItemIdFinder().findHoveredItemId();
+        if (skyBlockItemId == null) {
             return;
         }
 
-        appendTooltipWithItemId(cir, skyBlockItemId.get());
-    }
-
-    @Unique
-    private static @NotNull Optional<String> findItemId() {
-        GetItemIdHandler getItemIdHandler = new GetItemIdHandler();
-
-        Optional<GetItemIdHandler.GetItemIdResponse> response = getItemIdHandler.getItemId(new GetItemIdHandler.GetItemIdRequest());
-        return response.map(value -> value.itemId);
+        appendTooltipWithItemId(cir, skyBlockItemId);
     }
 
     @Unique

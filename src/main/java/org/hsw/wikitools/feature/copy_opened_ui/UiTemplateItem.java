@@ -1,8 +1,10 @@
 package org.hsw.wikitools.feature.copy_opened_ui;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Optional;
 
-class UiTemplateItem {
+public class UiTemplateItem {
     public final int rowIndex;  // zero-indexed
     public final int colIndex;  // zero-indexed
 
@@ -22,20 +24,20 @@ class UiTemplateItem {
     }
 
     public static Optional<UiTemplateItem> of(
-            Optional<Invslot> invslot,
+            @Nullable InventorySlot inventorySlot,
             int rowIndex,
             int colIndex,
             boolean fillWithBlankByDefault,
             boolean alwaysUseMcItemNameForNonSkullItems
     ) {
-        Optional<String> templateItemValue = invslot.isPresent() ?
-                invslot.get().formatAsTemplateItemValue(fillWithBlankByDefault, alwaysUseMcItemNameForNonSkullItems) :
-                Invslot.formatEmptySlotAsTemplateItemValue(fillWithBlankByDefault);
+        Optional<String> templateItemValue = inventorySlot != null ?
+                inventorySlot.formatAsTemplateItemValue(fillWithBlankByDefault, alwaysUseMcItemNameForNonSkullItems) :
+                InventorySlot.formatEmptySlotAsTemplateItemValue(fillWithBlankByDefault);
 
-        boolean matchedAsCloseItem = invslot.isPresent() && invslot.get().matchesAsCloseItem();
-        boolean matchedAsGoBackItem = invslot.isPresent() && invslot.get().matchesAsGoBackItem();
+        boolean matchedAsCloseItem = inventorySlot != null && inventorySlot.matchesAsCloseItem();
+        boolean matchedAsGoBackItem = inventorySlot != null && inventorySlot.matchesAsGoBackItem();
 
-        String loreText = invslot.isPresent() ? invslot.get().getLoreText() : "";
+        String loreText = inventorySlot != null ? inventorySlot.getLoreText() : "";
 
         return templateItemValue.map(value ->
                 new UiTemplateItem(rowIndex, colIndex, value, loreText, matchedAsCloseItem, matchedAsGoBackItem));

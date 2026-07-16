@@ -8,13 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 class UiTemplateCall {
-    private static final MctextTemplateFormatter uiNameFormatter =
-            new MctextTemplateFormatter(new HashMap<>());
+    private static final MctextTemplateFormatter UI_NAME_FORMATTER = new MctextTemplateFormatter(new HashMap<>());
 
     private final String uiName;
-
     private final CompleteUiGrid completeUiGrid;
-
     private final boolean fillWithBlankByDefault;
 
     private UiTemplateCall(
@@ -23,9 +20,7 @@ class UiTemplateCall {
             boolean fillWithBlankByDefault
     ) {
         this.uiName = uiName;
-
         this.completeUiGrid = completeUiGrid;
-
         this.fillWithBlankByDefault = fillWithBlankByDefault;
     }
 
@@ -37,14 +32,13 @@ class UiTemplateCall {
         List<List<Optional<UiTemplateItem>>> itemGrid = getItemGridFromChestContainer(
                 chestContainer, fillWithBlankByDefault, alwaysUseMcItemNameForNonSkullItems);
 
-        CompleteUiGrid completeUiGrid = new CompleteUiGrid(chestContainer.numRows, ChestContainer.NUMCOLS, itemGrid);
+        CompleteUiGrid completeUiGrid = new CompleteUiGrid(chestContainer.numRows, ChestContainer.COLUMNS_AMOUNT, itemGrid);
 
-        UiTemplateCall uiTemplateCall = new UiTemplateCall(
+        return new UiTemplateCall(
                 chestContainer.containerName,
                 completeUiGrid,
-                fillWithBlankByDefault);
-
-        return uiTemplateCall;
+                fillWithBlankByDefault
+        );
     }
 
     private static List<List<Optional<UiTemplateItem>>> getItemGridFromChestContainer(
@@ -52,13 +46,13 @@ class UiTemplateCall {
             boolean fillWithBlankByDefault,
             boolean alwaysUseMcItemNameForNonSkullItems
     ) {
-        List<List<Optional<UiTemplateItem>>> itemGrid = createEmptyItemGrid(chestContainer.numRows, ChestContainer.NUMCOLS);
+        List<List<Optional<UiTemplateItem>>> itemGrid = createEmptyItemGrid(chestContainer.numRows);
 
         for (int rowIndex = 0; rowIndex < chestContainer.numRows; rowIndex++) {
-            for (int colIndex = 0; colIndex < ChestContainer.NUMCOLS; colIndex++) {
-                Optional<Invslot> invslot = chestContainer.getGridCell(rowIndex, colIndex);
+            for (int colIndex = 0; colIndex < ChestContainer.COLUMNS_AMOUNT; colIndex++) {
+                Optional<InventorySlot> inventorySlot = chestContainer.getGridCell(rowIndex, colIndex);
                 Optional<UiTemplateItem> uiTemplateItem = UiTemplateItem.of(
-                        invslot,
+                        inventorySlot.orElse(null),
                         rowIndex,
                         colIndex,
                         fillWithBlankByDefault,
@@ -71,13 +65,13 @@ class UiTemplateCall {
         return itemGrid;
     }
 
-    private static List<List<Optional<UiTemplateItem>>> createEmptyItemGrid(int numRows, int numCols) {
+    private static List<List<Optional<UiTemplateItem>>> createEmptyItemGrid(int numRows) {
         List<List<Optional<UiTemplateItem>>> itemGrid = new ArrayList<>();
 
         for (int rowIndex = 0; rowIndex < numRows; rowIndex++) {
             itemGrid.add(new ArrayList<>());
             List<Optional<UiTemplateItem>> list = itemGrid.get(rowIndex);
-            for (int colIndex = 0; colIndex < numCols; colIndex++) {
+            for (int colIndex = 0; colIndex < ChestContainer.COLUMNS_AMOUNT; colIndex++) {
                 list.add(Optional.empty());
             }
         }
@@ -88,7 +82,7 @@ class UiTemplateCall {
     public String formatAsTemplateCall() {
         List<String> lines = new ArrayList<>();
 
-        String name = uiNameFormatter.formatName(uiName);
+        String name = UI_NAME_FORMATTER.formatName(uiName);
 
         lines.add("{{UI|" + name);
 
@@ -98,14 +92,14 @@ class UiTemplateCall {
             lines.add("|fill=false");
         }
 
-        if (completeUiGrid.uniqueCloseItem.isPresent()) {
-            lines.add(completeUiGrid.uniqueCloseItem.get().toTemplateArgumentAsCloseItem());
+        if (completeUiGrid.uniqueCloseItem != null) {
+            lines.add(completeUiGrid.uniqueCloseItem.toTemplateArgumentAsCloseItem());
         } else {
             lines.add("|close=none");
         }
 
-        if (completeUiGrid.uniqueGoBackItem.isPresent()) {
-            lines.add(completeUiGrid.uniqueGoBackItem.get().toTemplateArgumentAsGoBackItem());
+        if (completeUiGrid.uniqueGoBackItem != null) {
+            lines.add(completeUiGrid.uniqueGoBackItem.toTemplateArgumentAsGoBackItem());
         } else {
             lines.add("|arrow=none");
         }

@@ -3,77 +3,70 @@ package org.hsw.wikitools.feature.copy_item_tooltip;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GetItemTooltipHandlerTest {
-    private void runTestExpectEmpty(Optional<Invslot> invslot) {
-        FindHoveredInvslot invslotMock = new HoveredInvslotFinderStub(invslot);
-        GetItemTooltipHandler classUnderTest = new GetItemTooltipHandler(invslotMock);
+    private void runTestExpectEmpty() {
+        FindHoveredInventorySlot inventorySlotMock = new HoveredInventorySlotFinderStub(null);
+        GetItemTooltipHandler classUnderTest = new GetItemTooltipHandler(inventorySlotMock);
 
-        Optional<GetItemTooltipHandler.GetItemTooltipResponse> inventorySlotTemplateCall =
-                classUnderTest.getInventorySlotTemplateCall(new GetItemTooltipHandler.GetItemTooltipRequest());
-        assertFalse(inventorySlotTemplateCall.isPresent());
+        String inventorySlotTemplateCall = classUnderTest.getInventorySlotTemplateCall();
+        assertNull(inventorySlotTemplateCall);
 
-        Optional<GetItemTooltipHandler.GetItemTooltipResponse> tooltipModuleDataItem =
-                classUnderTest.getTooltipModuleDataItem(new GetItemTooltipHandler.GetItemTooltipRequest());
-        assertFalse(tooltipModuleDataItem.isPresent());
+        String tooltipModuleDataItem = classUnderTest.getTooltipModuleDataItem();
+        assertNull(tooltipModuleDataItem);
     }
 
-    private void runTest(Optional<Invslot> invslot, String expectedTemplateString, String expectedModuleString) {
-        FindHoveredInvslot invslotMock = new HoveredInvslotFinderStub(invslot);
-        GetItemTooltipHandler classUnderTest = new GetItemTooltipHandler(invslotMock);
+    private void runTest(TooltipInventorySlot inventorySlot, String expectedTemplateString, String expectedModuleString) {
+        FindHoveredInventorySlot inventorySlotMock = new HoveredInventorySlotFinderStub(inventorySlot);
+        GetItemTooltipHandler classUnderTest = new GetItemTooltipHandler(inventorySlotMock);
 
-        Optional<GetItemTooltipHandler.GetItemTooltipResponse> inventorySlotTemplateCall =
-                classUnderTest.getInventorySlotTemplateCall(new GetItemTooltipHandler.GetItemTooltipRequest());
-        assertTrue(inventorySlotTemplateCall.isPresent());
-        String templateString = inventorySlotTemplateCall.get().tooltip;
-        assertEquals(expectedTemplateString, templateString);
+        String inventorySlotTemplateCall = classUnderTest.getInventorySlotTemplateCall();
+        assertNotNull(inventorySlotTemplateCall);
+        assertEquals(expectedTemplateString, inventorySlotTemplateCall);
 
-        Optional<GetItemTooltipHandler.GetItemTooltipResponse> tooltipModuleDataItem =
-                classUnderTest.getTooltipModuleDataItem(new GetItemTooltipHandler.GetItemTooltipRequest());
-        assertTrue(tooltipModuleDataItem.isPresent());
-        String moduleString = tooltipModuleDataItem.get().tooltip;
-        assertEquals(expectedModuleString, moduleString);
+        String tooltipModuleDataItem = classUnderTest.getTooltipModuleDataItem();
+        assertNotNull(tooltipModuleDataItem);
+        assertEquals(expectedModuleString, tooltipModuleDataItem);
     }
 
     @Test
     void shouldReturnEmpty() {
-        Optional<Invslot> invslot = Optional.empty();
-        runTestExpectEmpty(invslot);
+        runTestExpectEmpty();
     }
 
     @Test
     void shouldReturnTooltipWithEmptyLore() {
-        Optional<Invslot> invslot = Optional.of(new Invslot("Empty Lore Item", Arrays.asList()));
+        TooltipInventorySlot inventorySlot = new TooltipInventorySlot("Empty Lore Item", List.of());
         String expectedTemplateString = "{{Slot|Empty Lore Item|title=Empty Lore Item}}";
         String expectedModuleString = "['Empty Lore Item'] = { name = 'Empty Lore Item', title = 'Empty Lore Item', },";
-        runTest(invslot, expectedTemplateString, expectedModuleString);
+        runTest(inventorySlot, expectedTemplateString, expectedModuleString);
     }
 
     @Test
     void shouldReturnMultiLineTooltip() {
-        Optional<Invslot> invslot = Optional.of(new Invslot("Test Item", Arrays.asList("Lore line 1", "Lore line 2")));
+        TooltipInventorySlot inventorySlot = new TooltipInventorySlot("Test Item", Arrays.asList("Lore line 1", "Lore line 2"));
         String expectedTemplateString = "{{Slot|Test Item|title=Test Item|text=Lore line 1/Lore line 2}}";
         String expectedModuleString = "['Test Item'] = { name = 'Test Item', title = 'Test Item', text = 'Lore line 1/Lore line 2', },";
-        runTest(invslot, expectedTemplateString, expectedModuleString);
+        runTest(inventorySlot, expectedTemplateString, expectedModuleString);
     }
 
     @Test
     void shouldFormatItem() {
-        Optional<Invslot> invslot = Optional.of(new Invslot("§5Formatted Item", Arrays.asList("Line with §a green text and §b blue text")));
+        TooltipInventorySlot inventorySlot = new TooltipInventorySlot("§5Formatted Item", List.of("Line with §a green text and §b blue text"));
         String expectedTemplateString = "{{Slot|Formatted Item|title=&5Formatted Item|text=Line with &a green text and &b blue text}}";
         String expectedModuleString = "['Formatted Item'] = { name = 'Formatted Item', title = '&5Formatted Item', text = 'Line with &a green text and &b blue text', },";
-        runTest(invslot, expectedTemplateString, expectedModuleString);
+        runTest(inventorySlot, expectedTemplateString, expectedModuleString);
     }
 
     @Test
     void shouldFormatItemWithCorrectEscapes() {
-        Optional<Invslot> invslot = Optional.of(new Invslot("Item", Arrays.asList("Comma , is not escaped but backslash \\ is.")));
+        TooltipInventorySlot inventorySlot = new TooltipInventorySlot("Item", List.of("Comma , is not escaped but backslash \\ is."));
         String expectedTemplateString = "{{Slot|Item|title=Item|text=Comma , is not escaped but backslash \\\\ is.}}";
         String expectedModuleString = "['Item'] = { name = 'Item', title = 'Item', text = 'Comma , is not escaped but backslash \\\\\\\\ is.', },";
-        runTest(invslot, expectedTemplateString, expectedModuleString);
+        runTest(inventorySlot, expectedTemplateString, expectedModuleString);
     }
 
 }

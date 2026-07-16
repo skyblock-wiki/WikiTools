@@ -19,7 +19,7 @@ class GetNewVersionHandlerTest {
         );
         GetNewVersionHandler getNewVersionHandler = new GetNewVersionHandler(latestReleaseFinderStub);
         Future<GetNewVersionHandler.GetNewVersionResponse> result =
-                getNewVersionHandler.getNewVersion(new GetNewVersionHandler.GetNewVersionRequest(currentVersion));
+                getNewVersionHandler.getNewVersion(currentVersion);
         return assertDoesNotThrow(() -> result.get());
     }
 
@@ -29,15 +29,15 @@ class GetNewVersionHandlerTest {
         @Test
         void whenCurrentVersionIsNotValidSemVer() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("2.0", "v1.0.0");
-            assertFalse(response.success);
-            assertEquals(response.message, Optional.of("Version Parse Failure (2.0)"));
+            assertFalse(response.success());
+            assertEquals(response.message(), Optional.of("Version Parse Failure (2.0)"));
         }
 
         @Test
         void whenLatestVersionIsNotValidSemVer() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("1.0.0", "2.0");
-            assertFalse(response.success);
-            assertEquals(response.message, Optional.of("Version Parse Failure (2.0)"));
+            assertFalse(response.success());
+            assertEquals(response.message(), Optional.of("Version Parse Failure (2.0)"));
         }
 
         @Test
@@ -46,11 +46,10 @@ class GetNewVersionHandlerTest {
                     FindModVersion.FindModVersionResult.failure("Latest Release Fetch/Parse Failure (HTTP/1.1 404 Not Found)")
             );
             GetNewVersionHandler getNewVersionHandler = new GetNewVersionHandler(latestReleaseFinderStub);
-            Future<GetNewVersionHandler.GetNewVersionResponse> result =
-                    getNewVersionHandler.getNewVersion(new GetNewVersionHandler.GetNewVersionRequest("1.0.0"));
+            Future<GetNewVersionHandler.GetNewVersionResponse> result = getNewVersionHandler.getNewVersion("1.0.0");
             GetNewVersionHandler.GetNewVersionResponse response = assertDoesNotThrow(() -> result.get());
-            assertFalse(response.success);
-            assertEquals(response.message, Optional.of("Latest Release Fetch/Parse Failure (HTTP/1.1 404 Not Found)"));
+            assertFalse(response.success());
+            assertEquals(response.message(), Optional.of("Latest Release Fetch/Parse Failure (HTTP/1.1 404 Not Found)"));
         }
 
     }
@@ -66,9 +65,9 @@ class GetNewVersionHandlerTest {
         })
         void whenIsValidSemVer(String versionName) {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion(versionName, versionName);
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertEquals(response.result.get().latestVersion, versionName);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertEquals(response.result().get().latestVersion(), versionName);
         }
 
     }
@@ -79,9 +78,9 @@ class GetNewVersionHandlerTest {
         @Test
         void whenVersionsAreEqual() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("2.0.0", "2.0.0");
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertFalse(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertFalse(response.result().get().hasNewRelease());
         }
 
         @ParameterizedTest
@@ -91,25 +90,25 @@ class GetNewVersionHandlerTest {
         })
         void whenLatestPatchVersionIsSmaller(String currentVersion, String latestVersion) {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion(currentVersion, latestVersion);
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertFalse(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertFalse(response.result().get().hasNewRelease());
         }
 
         @Test
         void whenLatestMinorVersionIsSmaller() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("2.1.0", "2.0.10");
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertFalse(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertFalse(response.result().get().hasNewRelease());
         }
 
         @Test
         void whenLatestMajorVersionIsSmaller() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("2.0.0", "1.10.10");
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertFalse(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertFalse(response.result().get().hasNewRelease());
         }
 
     }
@@ -120,9 +119,9 @@ class GetNewVersionHandlerTest {
         @Test
         void whenPrereleaseIsReleased() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("1.10.10-beta.10", "1.10.10");
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertTrue(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertTrue(response.result().get().hasNewRelease());
         }
 
         @ParameterizedTest
@@ -132,25 +131,25 @@ class GetNewVersionHandlerTest {
         })
         void whenLatestPatchVersionIsLarger(String currentVersion, String latestVersion) {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion(currentVersion, latestVersion);
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertTrue(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertTrue(response.result().get().hasNewRelease());
         }
 
         @Test
         void whenLatestMinorVersionIsLarger() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("2.0.10", "2.1.0");
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertTrue(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertTrue(response.result().get().hasNewRelease());
         }
 
         @Test
         void whenLatestMajorVersionIsLarger() {
             GetNewVersionHandler.GetNewVersionResponse response = getNewVersion("1.10.10", "2.0.0");
-            assertTrue(response.success);
-            assertTrue(response.result.isPresent());
-            assertTrue(response.result.get().hasNewRelease);
+            assertTrue(response.success());
+            assertTrue(response.result().isPresent());
+            assertTrue(response.result().get().hasNewRelease());
         }
 
     }

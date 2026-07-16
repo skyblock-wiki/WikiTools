@@ -13,8 +13,6 @@ import net.minecraft.network.chat.Component;
 import org.hsw.wikitools.common.ClipboardHelper;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Optional;
-
 import static org.hsw.wikitools.ModProperties.CATEGORY;
 
 public class CopySkullIdListener {
@@ -23,10 +21,7 @@ public class CopySkullIdListener {
 
     public CopySkullIdListener(GetSkullIdHandler getSkullIdHandler) {
         this.getSkullIdHandler = getSkullIdHandler;
-
         this.copySkullIdKeyBinding = registerKeyBinding();
-
-        registerEvent();
     }
 
      private KeyMapping registerKeyBinding() {
@@ -38,18 +33,15 @@ public class CopySkullIdListener {
          ));
      }
 
-    private void registerEvent() {
+     public void registerEvent() {
         // Add a listener for screen events (when a screen is opened)
         // to add a keyboard event listener for the HandledScreen
 
-        ScreenEvents.BEFORE_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
+        ScreenEvents.BEFORE_INIT.register((client, screen, _, _) -> {
             // Add a listener for keyboard events if the screen is a HandledScreen
-
-            if (!(screen instanceof AbstractContainerScreen<?>)) {
-                return; // Only register for InventoryScreen
+            if (screen instanceof AbstractContainerScreen<?>) {
+                ScreenKeyboardEvents.afterKeyPress(screen).register((_, keyInput) -> onKeyPress(client, keyInput));
             }
-
-            ScreenKeyboardEvents.afterKeyPress(screen).register((screen1, keyInput) -> onKeyPress(client, keyInput));
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
@@ -68,12 +60,11 @@ public class CopySkullIdListener {
     }
 
     private void copySkullId(Minecraft client) {
-        Optional<GetSkullIdHandler.GetSkullIdResponse> response = getSkullIdHandler.getSkullId(new GetSkullIdHandler.GetSkullIdRequest());
-        if (response.isEmpty()) {
+        String skullId = getSkullIdHandler.getSkullId();
+        if (skullId == null) {
             return;
         }
-        String stringToCopy = response.get().textureId;
-        ClipboardHelper.setClipboard(stringToCopy);
+        ClipboardHelper.setClipboard(skullId);
         client.gui.chatListener().handleSystemMessage(Component.translatable("message.wikitools.copy_skull_id.success"), false);
     }
 }
