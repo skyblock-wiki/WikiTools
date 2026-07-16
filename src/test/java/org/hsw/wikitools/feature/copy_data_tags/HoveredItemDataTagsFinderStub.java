@@ -1,6 +1,6 @@
 package org.hsw.wikitools.feature.copy_data_tags;
 
-public class HoveredItemDataTagsFinderStub implements FindHoveredItemDataTags {
+public class HoveredItemDataTagsFinderStub extends HoveredItemDataTagsFinder {
     public int callCount = 0;
     private final String itemDataTags;
 

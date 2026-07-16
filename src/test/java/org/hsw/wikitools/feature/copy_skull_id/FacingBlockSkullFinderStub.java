@@ -1,6 +1,6 @@
 package org.hsw.wikitools.feature.copy_skull_id;
 
-public class FacingBlockSkullFinderStub implements FindFacingBlockSkull {
+public class FacingBlockSkullFinderStub extends FacingBlockSkullFinder {
     public int callCount = 0;
     private final Skull skull;
 

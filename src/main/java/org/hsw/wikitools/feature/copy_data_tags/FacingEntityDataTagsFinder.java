@@ -9,8 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.TagValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-public class FacingEntityDataTagsFinder implements FindFacingEntityDataTags {
-    @Override
+public class FacingEntityDataTagsFinder {
     @Nullable
     public String findFacingEntityDataTags() {
         Minecraft client = Minecraft.getInstance();

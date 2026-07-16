@@ -1,6 +1,6 @@
 package org.hsw.wikitools.feature.copy_item_tooltip;
 
-class HoveredInventorySlotFinderStub implements FindHoveredInventorySlot {
+class HoveredInventorySlotFinderStub extends HoveredInventorySlotFinder {
     private final TooltipInventorySlot tooltipInventorySlot;
 
     public HoveredInventorySlotFinderStub(TooltipInventorySlot tooltipInventorySlot) {

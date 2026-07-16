@@ -14,8 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class FacingEntitySkullFinder implements FindFacingEntitySkull {
-    @Override
+public class FacingEntitySkullFinder {
     @Nullable
     public Skull findFacingSkull() {
         Minecraft client = Minecraft.getInstance();

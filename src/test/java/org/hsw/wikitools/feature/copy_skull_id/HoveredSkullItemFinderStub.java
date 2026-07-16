@@ -1,6 +1,6 @@
 package org.hsw.wikitools.feature.copy_skull_id;
 
-public class HoveredSkullItemFinderStub implements FindHoveredSkullItem {
+public class HoveredSkullItemFinderStub extends HoveredSkullItemFinder {
     public int callCount = 0;
     private final Skull skull;
 

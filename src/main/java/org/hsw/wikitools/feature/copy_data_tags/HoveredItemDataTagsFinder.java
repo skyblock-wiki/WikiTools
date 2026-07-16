@@ -6,8 +6,7 @@ import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.world.item.ItemStack;
 import org.hsw.wikitools.utils.ItemsUtil;
 
-public class HoveredItemDataTagsFinder implements FindHoveredItemDataTags {
-    @Override
+public class HoveredItemDataTagsFinder {
     public String findHoveredItemDataTags() {
         ItemStack focusedItemStack = ItemsUtil.findFocusedItemStack();
         if (focusedItemStack == null) {

@@ -16,8 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.ExecutionException;
 
-public class FacingBlockEntityDataTagsFinder implements FindFacingBlockEntityDataTags {
-    @Override
+public class FacingBlockEntityDataTagsFinder {
     public String findFacingBlockEntityDataTags() {
         Minecraft client = Minecraft.getInstance();
 

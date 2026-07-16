@@ -14,8 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-public class FacingBlockSkullFinder implements FindFacingBlockSkull {
-    @Override
+public class FacingBlockSkullFinder {
     @Nullable
     public Skull findFacingSkull() {
         BlockEntity blockEntity = findFacingBlock();

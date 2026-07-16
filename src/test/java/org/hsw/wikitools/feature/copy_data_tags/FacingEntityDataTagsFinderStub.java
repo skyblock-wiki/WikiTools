@@ -1,6 +1,6 @@
 package org.hsw.wikitools.feature.copy_data_tags;
 
-public class FacingEntityDataTagsFinderStub implements FindFacingEntityDataTags {
+public class FacingEntityDataTagsFinderStub extends FacingEntityDataTagsFinder {
     public int callCount = 0;
     private final String entityDataTags;
 

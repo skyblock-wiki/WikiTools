@@ -15,8 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
-public class HoveredSkullItemFinder implements FindHoveredSkullItem {
-    @Override
+public class HoveredSkullItemFinder {
     @Nullable
     public Skull findHoveredSkull() {
         ItemStack focusedItemStack = ItemsUtil.findFocusedItemStack();

@@ -3,9 +3,9 @@ package org.hsw.wikitools.feature.copy_opened_ui;
 import org.jetbrains.annotations.Nullable;
 
 public class GetOpenedUiHandler {
-    private final FindOpenedChestContainer findOpenedChestContainer;
+    private final OpenedChestContainerFinder findOpenedChestContainer;
 
-    public GetOpenedUiHandler(FindOpenedChestContainer findOpenedChestContainer) {
+    public GetOpenedUiHandler(OpenedChestContainerFinder findOpenedChestContainer) {
         this.findOpenedChestContainer = findOpenedChestContainer;
     }
 

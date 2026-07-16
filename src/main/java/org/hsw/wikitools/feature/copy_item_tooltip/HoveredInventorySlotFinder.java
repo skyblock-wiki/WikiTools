@@ -11,9 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HoveredInventorySlotFinder implements FindHoveredInventorySlot {
-
-    @Override
+public class HoveredInventorySlotFinder {
     public TooltipInventorySlot findHoveredInventorySlot() {
         ItemStack focusedItemStack = ItemsUtil.findFocusedItemStack();
         return focusedItemStack == null ? null : getInventorySlotFromItemStack(focusedItemStack); // No item hovered

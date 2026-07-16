@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GetItemTooltipHandlerTest {
     private void runTestExpectEmpty() {
-        FindHoveredInventorySlot inventorySlotMock = new HoveredInventorySlotFinderStub(null);
+        HoveredInventorySlotFinderStub inventorySlotMock = new HoveredInventorySlotFinderStub(null);
         GetItemTooltipHandler classUnderTest = new GetItemTooltipHandler(inventorySlotMock);
 
         String inventorySlotTemplateCall = classUnderTest.getInventorySlotTemplateCall();
@@ -20,7 +20,7 @@ class GetItemTooltipHandlerTest {
     }
 
     private void runTest(TooltipInventorySlot inventorySlot, String expectedTemplateString, String expectedModuleString) {
-        FindHoveredInventorySlot inventorySlotMock = new HoveredInventorySlotFinderStub(inventorySlot);
+        HoveredInventorySlotFinderStub inventorySlotMock = new HoveredInventorySlotFinderStub(inventorySlot);
         GetItemTooltipHandler classUnderTest = new GetItemTooltipHandler(inventorySlotMock);
 
         String inventorySlotTemplateCall = classUnderTest.getInventorySlotTemplateCall();

@@ -2,7 +2,7 @@ package org.hsw.wikitools.feature.copy_opened_ui;
 
 import org.jetbrains.annotations.Nullable;
 
-public class OpenedChestContainerFinderStub implements FindOpenedChestContainer {
+public class OpenedChestContainerFinderStub extends OpenedChestContainerFinder {
     @Nullable
     private final ChestContainer chestContainer;
 

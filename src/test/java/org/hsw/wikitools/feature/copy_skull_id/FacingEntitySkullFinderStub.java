@@ -1,6 +1,6 @@
 package org.hsw.wikitools.feature.copy_skull_id;
 
-public class FacingEntitySkullFinderStub implements FindFacingEntitySkull {
+public class FacingEntitySkullFinderStub extends FacingEntitySkullFinder {
     public int callCount = 0;
     private final Skull skull;
 

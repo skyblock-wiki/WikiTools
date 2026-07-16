@@ -3,15 +3,15 @@ package org.hsw.wikitools.feature.copy_item_tooltip;
 import org.jetbrains.annotations.Nullable;
 
 public class GetItemTooltipHandler {
-    private final FindHoveredInventorySlot findHoveredInventorySlot;
+    private final HoveredInventorySlotFinder hoveredInventorySlotFinder;
 
-    public GetItemTooltipHandler(FindHoveredInventorySlot findHoveredInventorySlot) {
-        this.findHoveredInventorySlot = findHoveredInventorySlot;
+    public GetItemTooltipHandler(HoveredInventorySlotFinder hoveredInventorySlotFinder) {
+        this.hoveredInventorySlotFinder = hoveredInventorySlotFinder;
     }
 
     @Nullable
     public String getInventorySlotTemplateCall() {
-        TooltipInventorySlot inventorySlot = findHoveredInventorySlot.findHoveredInventorySlot();
+        TooltipInventorySlot inventorySlot = hoveredInventorySlotFinder.findHoveredInventorySlot();
         if (inventorySlot == null) {
             return null;
         }
@@ -22,7 +22,7 @@ public class GetItemTooltipHandler {
 
     @Nullable
     public String getTooltipModuleDataItem() {
-        TooltipInventorySlot inventorySlot = findHoveredInventorySlot.findHoveredInventorySlot();
+        TooltipInventorySlot inventorySlot = hoveredInventorySlotFinder.findHoveredInventorySlot();
         if (inventorySlot == null) {
             return null;
         }

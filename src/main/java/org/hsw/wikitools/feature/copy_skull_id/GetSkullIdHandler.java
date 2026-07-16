@@ -1,26 +1,26 @@
 package org.hsw.wikitools.feature.copy_skull_id;
 
 public class GetSkullIdHandler {
-    private final FindHoveredSkullItem findHoveredSkullItem;
-    private final FindFacingEntitySkull findFacingEntitySkull;
-    private final FindFacingBlockSkull findFacingBlockSkull;
+    private final HoveredSkullItemFinder hoveredSkullItemFinder;
+    private final FacingEntitySkullFinder entitySkullFinder;
+    private final FacingBlockSkullFinder blockSkullFinder;
 
-    public GetSkullIdHandler(FindHoveredSkullItem findHoveredSkullItem, FindFacingEntitySkull findFacingEntitySkull, FindFacingBlockSkull findFacingBlockSkull) {
-        this.findHoveredSkullItem = findHoveredSkullItem;
-        this.findFacingEntitySkull = findFacingEntitySkull;
-        this.findFacingBlockSkull = findFacingBlockSkull;
+    public GetSkullIdHandler(HoveredSkullItemFinder hoveredSkullItemFinder, FacingEntitySkullFinder entitySkullFinder, FacingBlockSkullFinder blockSkullFinder) {
+        this.hoveredSkullItemFinder = hoveredSkullItemFinder;
+        this.entitySkullFinder = entitySkullFinder;
+        this.blockSkullFinder = blockSkullFinder;
     }
 
     public String getSkullId() {
-        Skull hoveredSkullItem = findHoveredSkullItem.findHoveredSkull();
+        Skull hoveredSkullItem = hoveredSkullItemFinder.findHoveredSkull();
         if (hoveredSkullItem != null) {
             return hoveredSkullItem.textureId;
         }
-        Skull facingEntitySkull = findFacingEntitySkull.findFacingSkull();
+        Skull facingEntitySkull = entitySkullFinder.findFacingSkull();
         if (facingEntitySkull != null) {
             return facingEntitySkull.textureId;
         }
-        Skull facingBlockSkull = findFacingBlockSkull.findFacingSkull();
+        Skull facingBlockSkull = blockSkullFinder.findFacingSkull();
         return facingBlockSkull == null ? null : facingBlockSkull.textureId;
     }
 }

@@ -19,9 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class OpenedChestContainerFinder implements FindOpenedChestContainer {
-
-    @Override
+public class OpenedChestContainerFinder {
     @Nullable
     public ChestContainer findCurrentChestContainer() {
         Screen currentScreen = Minecraft.getInstance().gui.screen();
