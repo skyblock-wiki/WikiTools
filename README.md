@@ -18,7 +18,7 @@ This mod focuses on non-rendering tasks. There is a separate mod, [WikiRenderer]
 
 Copy data tags (NBT) to your clipboard.
 
-<img src="./assets/copy-data-tags.jpg" width="600" alt="Copy Data Tags">
+<img src="src/main/resources/assets/wikitools/images/copy-data-tags.jpg" width="600" alt="Copy Data Tags">
 
 **Key**: N
 
@@ -30,7 +30,7 @@ This feature works on:
 
 Copy tooltip data of the item you are hovering over to your clipboard.
 
-<img src="./assets/copy-item-tooltip.jpg" width="600" alt="Copy Item Tooltip">
+<img src="src/main/resources/assets/wikitools/images/copy-item-tooltip.jpg" width="600" alt="Copy Item Tooltip">
 
 **Key**: X
 
@@ -42,7 +42,7 @@ Available Behaviors:
 
 Copy the opened UI to your clipboard in the UI template format.
 
-<img src="./assets/copy-opened-ui.jpg" width="600" alt="Copy Opened UI">
+<img src="src/main/resources/assets/wikitools/images/copy-opened-ui.jpg" width="600" alt="Copy Opened UI">
 
 **Key**: C
 
@@ -57,7 +57,7 @@ Available Behaviors:
 
 Copy the texture ID of a skull to your clipboard. With this ID, the corresponding skin file can be downloaded on `https://textures.minecraft.net/texture/<ID>`.
 
-<img src="./assets/copy-skull-id.jpg" width="600" alt="Copy Skull ID">
+<img src="src/main/resources/assets/wikitools/images/copy-skull-id.jpg" width="600" alt="Copy Skull ID">
 
 This feature works on:
 - Placed player heads.
@@ -70,13 +70,13 @@ This feature works on:
 
 Check for new WikiTools release on GitHub and send an update reminder message.
 
-<img src="./assets/mod-update-checker.jpg" width="600" alt="Mod Update Checker">
+<img src="src/main/resources/assets/wikitools/images/mod-update-checker.jpg" width="600" alt="Mod Update Checker">
 
 #### View Item ID
 
 Find the SkyBlock item ID of the item you are hovering over and append it to the tooltip shown on screen.
 
-<img src="./assets/view-item-id.jpg" width="150" alt="View Item ID">
+<img src="src/main/resources/assets/wikitools/images/view-item-id.jpg" width="150" alt="View Item ID">
 
 This feature is active when Show Advanced Tooltips (F3+H) is on.
 

@@ -14,5 +14,3 @@ plugins {
 }
 
 rootProject.name = "wikitools"
-
-include("core", "fabric")
