@@ -56,7 +56,7 @@ public class CopySkullIdListener {
     }
 
     private void onClientTick(Minecraft client) {
-        while (client.screen == null && copySkullIdKeyBinding.consumeClick()) {
+        while (client.gui.screen() == null && copySkullIdKeyBinding.consumeClick()) {
             copySkullId(client);
         }
     }
@@ -74,6 +74,6 @@ public class CopySkullIdListener {
         }
         String stringToCopy = response.get().textureId;
         ClipboardHelper.setClipboard(stringToCopy);
-        client.getChatListener().handleSystemMessage(Component.translatable("message.wikitools.copy_skull_id.success"), false);
+        client.gui.chatListener().handleSystemMessage(Component.translatable("message.wikitools.copy_skull_id.success"), false);
     }
 }

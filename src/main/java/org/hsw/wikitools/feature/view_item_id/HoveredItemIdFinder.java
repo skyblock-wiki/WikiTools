@@ -17,7 +17,7 @@ public class HoveredItemIdFinder {
 
     public Optional<String> findHoveredItemId() {
         Minecraft client = Minecraft.getInstance();
-        Screen screen = client.screen;
+        Screen screen = client.gui.screen();
 
         if (!(screen instanceof AbstractContainerScreen<?> handledScreen)) {
             return Optional.empty(); // Not a handled screen, cannot find hovered item

@@ -91,6 +91,6 @@ public class CopyOpenedUiListener {
                 .append("└ ").append(alwaysUseMcItemNameForNonSkullItems ? tick : cross).append(" ")
                     .append(Component.translatable("message.wikitools.copy_opened_ui.auminfnsi_mode_name")).append(" ")
                     .append(auminfnsiOptionTips);
-        client.getChatListener().handleSystemMessage(outputText, false);
+        client.gui.chatListener().handleSystemMessage(outputText, false);
     }
 }

@@ -24,7 +24,7 @@ public class OpenedChestContainerFinder implements FindOpenedChestContainer {
 
     @Override
     public Optional<ChestContainer> findCurrentChestContainer() {
-        Screen currentScreen = Minecraft.getInstance().screen;
+        Screen currentScreen = Minecraft.getInstance().gui.screen();
 
         if (currentScreen == null) {
             return Optional.empty();  // Cannot find screen
@@ -110,10 +110,10 @@ public class OpenedChestContainerFinder implements FindOpenedChestContainer {
         TextColor color = style.getColor();
         if (color != null) {
             String colorName = style.getColor().serialize();
-            ChatFormatting formatting = ChatFormatting.getByName(colorName);
-            if (formatting != null) {
+            try {
+                ChatFormatting formatting = ChatFormatting.valueOf(colorName.toUpperCase());
                 sb.append(formatting);
-            }
+            } catch (IllegalArgumentException ignored) {}
         }
 
         if (style.isObfuscated()) {

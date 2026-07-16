@@ -37,7 +37,7 @@ public class HoveredItemDataTagsFinder implements FindHoveredItemDataTags {
 
     private static @NotNull Optional<ItemStack> findFocusedItemStack() {
         Minecraft client = Minecraft.getInstance();
-        Screen screen = client.screen;
+        Screen screen = client.gui.screen();
 
         if (!(screen instanceof AbstractContainerScreen<?> handledScreen)) {
             return Optional.empty(); // Not a handled screen, cannot find hovered item

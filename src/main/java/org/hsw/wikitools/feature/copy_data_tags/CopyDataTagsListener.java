@@ -56,7 +56,7 @@ public class CopyDataTagsListener {
     }
 
     private void onClientTick(Minecraft client) {
-        while (client.screen == null && copyDataTagsKeyBinding.consumeClick()) {
+        while (client.gui.screen() == null && copyDataTagsKeyBinding.consumeClick()) {
             copyDataTags(client);
         }
     }
@@ -74,6 +74,6 @@ public class CopyDataTagsListener {
         }
         String stringToCopy = response.get().dataTags;
         ClipboardHelper.setClipboard(stringToCopy);
-        client.getChatListener().handleSystemMessage(Component.translatable("message.wikitools.copy_data_tags.success"), false);
+        client.gui.chatListener().handleSystemMessage(Component.translatable("message.wikitools.copy_data_tags.success"), false);
     }
 }

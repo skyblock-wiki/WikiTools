@@ -81,7 +81,7 @@ public class CopyHoveredItemTooltipListener {
                         "message.wikitools.copy_tooltip.formatting_mode_tip"))));
         MutableComponent outputText = Component.translatable("message.wikitools.copy_tooltip.success").append("\n")
                 .append("└ ").append(Component.translatable("message.wikitools.copy_tooltip.with_template_formatting")).append(" ").append(formattingModeTip);
-        client.getChatListener().handleSystemMessage(Component.translationArg(outputText), false);
+        client.gui.chatListener().handleSystemMessage(Component.translationArg(outputText), false);
     }
 
     private void copyTooltipAsModuleData(Minecraft client) {
@@ -99,7 +99,7 @@ public class CopyHoveredItemTooltipListener {
                         "message.wikitools.copy_tooltip.formatting_mode_tip"))));
         MutableComponent outputText = Component.translatable("message.wikitools.copy_tooltip.success").append("\n")
                 .append("└ ").append(Component.translatable("message.wikitools.copy_tooltip.with_module_formatting")).append(" ").append(formattingModeTip);
-        client.getChatListener().handleSystemMessage(Component.translationArg(outputText), false);
+        client.gui.chatListener().handleSystemMessage(Component.translationArg(outputText), false);
     }
 
 }

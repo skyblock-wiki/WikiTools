@@ -25,7 +25,7 @@ public class ModUpdateChecker {
     private void registerEvent() {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             var isSelfJoin = client.player == Minecraft.getInstance().player;
-            var isSinglePlayer = client.isSingleplayer();
+            var isSinglePlayer = client.hasSingleplayerServer();
 
             if (!isSelfJoin || isSinglePlayer) {
                 return;
@@ -79,7 +79,7 @@ public class ModUpdateChecker {
 
     private static void printMessageInMainThread(Component message) {
         Minecraft client = Minecraft.getInstance();
-        client.execute(() -> client.gui.getChat().addClientSystemMessage(message));
+        client.execute(() -> client.gui.hud.getChat().addClientSystemMessage(message));
     }
 
     private static void warnFailure(String problemName) {
