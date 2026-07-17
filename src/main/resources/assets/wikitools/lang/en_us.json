@@ -24,5 +24,8 @@
   "message.wikitools.mod_update_checker.update_link_text": "Click here to see the new version.",
   "message.wikitools.mod_update_checker.error": "WikiTools Mod Update Checker encountered an error: %s",
 
-  "message.wikitools.view_item_id.item_id_display": "Item ID: %s"
+  "message.wikitools.view_item_id.item_id_display": "Item ID: %s",
+
+  "message.wikitools.invalid_recipe": "Cannot copy invalid recipe, barrier output detected",
+  "message.wikitools.copied_recipe": "Copied recipe to clipboard"
 }
