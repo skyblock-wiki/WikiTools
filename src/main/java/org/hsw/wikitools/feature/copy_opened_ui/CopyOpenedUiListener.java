@@ -19,7 +19,7 @@ import net.minecraft.world.item.Items;
 import org.hsw.wikitools.common.ClipboardHelper;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,19 +27,7 @@ import static org.hsw.wikitools.ModProperties.CATEGORY;
 
 public class CopyOpenedUiListener {
     protected static final int CRAFTING_TABLE_OR_RECIPE_REQUIRED_SLOT = 23;
-    protected static final Map<String, Integer> CRAFTING_TABLE_INGREDIENT_SLOTS = new LinkedHashMap<>();
-
-    static {
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("A1", 10);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("B1", 11);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("C1", 12);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("A2", 19);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("B2", 20);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("C2", 21);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("A3", 28);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("B3", 29);
-        CRAFTING_TABLE_INGREDIENT_SLOTS.put("C3", 30);
-    }
+    protected static final int[][] CRAFTING_TABLE_INGREDIENT_SLOTS = {{10, 19, 28}, {11, 20, 29}, {12, 21, 30}};
 
     private final GetOpenedUiHandler getOpenedUiHandler;
     private final KeyMapping copyOpenedUiKeybinding;
@@ -119,26 +107,52 @@ public class CopyOpenedUiListener {
         }
 
         builder.append("{{Crafting Recipe Table\n|{{Crafting Recipe Row\n |requirement = ADD HERE OR DELETE THIS");
-        char lastTemplateKey = ' ';
-        for (Map.Entry<String, Integer> positionEntry : CRAFTING_TABLE_INGREDIENT_SLOTS.entrySet()) {
-            String templateParameter = positionEntry.getKey();
-            int slot = positionEntry.getValue();
 
-            ItemStack itemStack = items.get(slot);
-            if (itemStack.isEmpty()) {
-                continue;
+        Map<Character, String[]> itemParamsMap = new HashMap<>();
+        for (int colIndex = 0, craftingTableIngredientSlotsLength = CRAFTING_TABLE_INGREDIENT_SLOTS.length; colIndex < craftingTableIngredientSlotsLength; colIndex++) {
+            int[] columnSlots = CRAFTING_TABLE_INGREDIENT_SLOTS[colIndex];
+
+            int longestTextLength = 0;
+            String[] rawColumnTexts = new String[3];
+
+            for (int rowIndex = 0, columnSlotsLength = columnSlots.length; rowIndex < columnSlotsLength; rowIndex++) {
+                int slot = columnSlots[rowIndex];
+
+                ItemStack itemStack = items.get(slot);
+                if (itemStack.isEmpty()) {
+                    rawColumnTexts[rowIndex] = "";
+                    continue;
+                }
+
+                String itemName = itemStack.getHoverName().getString();
+                String text = itemName + (itemStack.getCount() > 1 ? ", " + itemStack.getCount() : "");
+                rawColumnTexts[rowIndex] = text;
+
+                longestTextLength = Math.max(longestTextLength, text.length());
             }
 
-            String itemName = itemStack.getHoverName().getString();
-            String text = itemName + (itemStack.getCount() > 1 ? ", " + itemStack.getCount() : "");
-
-            char templateKey = templateParameter.charAt(1);
-            if (lastTemplateKey != templateKey) {
-                lastTemplateKey = templateKey;
-                builder.append("\n");
+            String[] columnTexts = new String[3];
+            for (int i = 0, rawColumnTextsLength = rawColumnTexts.length; i < rawColumnTextsLength; i++) {
+                String text = rawColumnTexts[i];
+                columnTexts[i] = text + " ".repeat(longestTextLength - text.length());
             }
 
-            builder.append(" |").append(templateParameter).append(" = ").append(text);
+            char letter = switch (colIndex) {
+                case 0 -> 'A';
+                case 1 -> 'B';
+                case 2 -> 'C';
+                default -> throw new IllegalStateException("Unexpected value: " + colIndex);
+            };
+
+            itemParamsMap.put(letter, columnTexts);
+        }
+
+        for (int rowIndex = 0; rowIndex <= 2; rowIndex++) {
+            StringBuilder text = new StringBuilder();
+            for (char key : new char[]{'A', 'B', 'C'}) {
+                text.append(" |").append(key).append(rowIndex + 1).append(" = ").append(itemParamsMap.get(key)[rowIndex]);
+            }
+            builder.append("\n").append(text);
         }
 
         String outputText = "";
