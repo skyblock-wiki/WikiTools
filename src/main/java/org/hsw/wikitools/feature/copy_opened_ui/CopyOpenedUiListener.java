@@ -101,10 +101,6 @@ public class CopyOpenedUiListener {
     protected void processRecipe(StringBuilder builder, String inventoryName, List<ItemStack> items) {
         boolean craftItem = inventoryName.equalsIgnoreCase("Craft Item");
         ItemStack product = craftItem ? items.get(23) : items.get(25);
-        if (craftItem && !product.isEmpty() && product.getItem() == Items.BARRIER) {
-            Minecraft.getInstance().gui.chatListener().handleSystemMessage(Component.translatable("message.wikitools.invalid_recipe"), false);
-            return;
-        }
 
         builder.append("{{Crafting Recipe Table\n|{{Crafting Recipe Row\n |requirement = ADD HERE OR DELETE THIS");
 

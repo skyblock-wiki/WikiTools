@@ -26,6 +26,5 @@
 
   "message.wikitools.view_item_id.item_id_display": "Item ID: %s",
 
-  "message.wikitools.invalid_recipe": "Cannot copy invalid recipe, barrier output detected",
   "message.wikitools.copied_recipe": "Copied recipe to clipboard"
 }
