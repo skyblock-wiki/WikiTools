@@ -13,9 +13,9 @@ class InventorySlotTemplateCall {
     }
 
     public static InventorySlotTemplateCall of(TooltipInventorySlot tooltipInventorySlot) {
-        String name = ITEM_FORMATTER.formatName(tooltipInventorySlot.name);
-        String title = ITEM_FORMATTER.formatTitle(tooltipInventorySlot.name);
-        String loreString = ITEM_FORMATTER.formatLore(tooltipInventorySlot.lore);
+        String name = ITEM_FORMATTER.formatName(tooltipInventorySlot.name());
+        String title = ITEM_FORMATTER.formatTitle(tooltipInventorySlot.name());
+        String loreString = ITEM_FORMATTER.formatLore(tooltipInventorySlot.lore());
 
         return new InventorySlotTemplateCall(name, title, loreString);
     }

@@ -3,6 +3,7 @@ package org.hsw.wikitools.feature.copy_item_tooltip;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
 import org.hsw.wikitools.utils.ItemsUtil;
@@ -34,7 +35,13 @@ public class HoveredInventorySlotFinder {
             loreTexts = loreComponent.styledLines();
         }
 
+        String tooltipStyle = "";
+        Identifier tooltipStyleIdentifier = components.get(DataComponents.TOOLTIP_STYLE);
+        if (tooltipStyleIdentifier != null) {
+            tooltipStyle = tooltipStyleIdentifier.getPath();
+        }
+
         List<String> loreLines = loreTexts.stream().map(ItemsUtil::formatComponentForWiki).toList();
-        return new TooltipInventorySlot(itemName, loreLines);
+        return new TooltipInventorySlot(itemName, tooltipStyle, loreLines);
     }
 }
