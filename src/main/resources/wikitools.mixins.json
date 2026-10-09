@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_25",
   "mixins": [
     "common.HandledScreenAccessor",
+    "copy_chat_message.ChatComponentAccessor",
     "view_item_id.TooltipItemIdAppender"
   ],
   "injectors": {

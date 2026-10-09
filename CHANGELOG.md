@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added 🐨
+
+- Add Copy Chat Message (Control+Click in chat): Copy chat messages to your clipboard with legacy formatting codes (`&`). Behaviors available:
+  - Control+Click: Copy the clicked message
+  - Control+Shift+Click: Select a range of messages, from a first clicked message to a second one
+  - Compatible with `{{RMT}}` syntax
+    - Escaping `/` and `&` with a backslash (`\`).
+
 ## [3.0.1] - 2026-04-19
 
 ### Changed

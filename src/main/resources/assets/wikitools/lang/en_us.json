@@ -20,6 +20,10 @@
 
   "message.wikitools.copy_skull_id.success": "Copied skull ID",
 
+  "message.wikitools.copy_chat_message.success": "Copied chat message",
+  "message.wikitools.copy_chat_message.success_selection": "Copied %s chat messages",
+  "message.wikitools.copy_chat_message.unknown_colors": "Unknown colors ignored (no legacy code): %s",
+
   "message.wikitools.mod_update_checker.new_update": "WikiTools has an update: %s.",
   "message.wikitools.mod_update_checker.update_link_text": "Click here to see the new version.",
   "message.wikitools.mod_update_checker.error": "WikiTools Mod Update Checker encountered an error: %s",

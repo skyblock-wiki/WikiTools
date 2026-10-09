@@ -80,6 +80,27 @@ Find the SkyBlock item ID of the item you are hovering over and append it to the
 
 This feature is active when Show Advanced Tooltips (F3+H) is on.
 
+#### Copy Chat Message
+
+Copy chat messages to your clipboard with legacy formatting codes (`&` instead of `§`). Only the displayed text is copied.
+
+**Key**: Control+Click on a message while the chat is open
+
+Available Behaviors:
+- Control+Click: Copy the clicked message. The hovered message is highlighted while Control is held.
+- Control+Shift+Click: Select the first message, then Control+Shift+Click another message to copy all messages between them (both included). The selection is highlighted and resets when the chat is closed.
+- Comply with the `{{RTM}}` Wiki template : 
+  - Escaping `&` and `/` with backslash (`\`)
+
+<img src="src/main/resources/assets/wikitools/images/copy-chat-text_chat.png" width="400" alt="Copied Chat Text">
+
+```
+&bNew day! &eYour &2Sky Mall &ebuff changed!
+&eNew buff&r: &a-20%&f Pickaxe Ability cooldowns.
+&8&oYou can disable this messaging by toggling Sky Mall in your \/hotm!
+``` 
+<img src="src/main/resources/assets/wikitools/images/copy-chat-text_RMT.png" width="100%" alt="Copied Chat Text">
+
 ## License
 
 WikiTools is licensed under [LGPL-3.0-or-later](./LICENSE).
