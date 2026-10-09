@@ -1,6 +1,9 @@
 package org.hsw.wikitools;
 
 import net.fabricmc.api.ClientModInitializer;
+import org.hsw.wikitools.feature.copy_chat_message.ChatMessageFinder;
+import org.hsw.wikitools.feature.copy_chat_message.CopyChatMessageListener;
+import org.hsw.wikitools.feature.copy_chat_message.GetChatMessageHandler;
 import org.hsw.wikitools.feature.copy_data_tags.*;
 import org.hsw.wikitools.feature.copy_item_tooltip.CopyHoveredItemTooltipListener;
 import org.hsw.wikitools.feature.copy_item_tooltip.GetItemTooltipHandler;
@@ -24,6 +27,7 @@ public class WikiTools implements ClientModInitializer {
         createCopySkullIdListener().registerEvent();
         createCopyDataTagsListener().registerEvent();
         createOpenedUiListener().registerEvent();
+        createCopyChatMessageListener().registerEvent();
         createModUpdateChecker().registerEvent();
     }
 
@@ -53,6 +57,12 @@ public class WikiTools implements ClientModInitializer {
         OpenedChestContainerFinder openedChestContainerFinder = new OpenedChestContainerFinder();
         GetOpenedUiHandler getOpenedUiHandler = new GetOpenedUiHandler(openedChestContainerFinder);
         return new CopyOpenedUiListener(getOpenedUiHandler);
+    }
+
+    private CopyChatMessageListener createCopyChatMessageListener() {
+        ChatMessageFinder chatMessageFinder = new ChatMessageFinder();
+        GetChatMessageHandler getChatMessageHandler = new GetChatMessageHandler(chatMessageFinder);
+        return new CopyChatMessageListener(getChatMessageHandler, chatMessageFinder);
     }
 
     private ModUpdateChecker createModUpdateChecker() {
