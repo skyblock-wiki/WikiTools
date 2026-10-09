@@ -15,6 +15,8 @@ import java.util.Set;
 public class LegacyTextFormatter {
     private static final char FORMAT_TAG_SYMBOL = '&';
     private static final char SECTION_SIGN = '§';
+    private static final String NEWLINE_SYMBOL = "/";
+    private static final String ESCAPE_SYMBOL = "\\";
 
     private static final Set<ChatFormatting> COLORS = EnumSet.range(ChatFormatting.BLACK, ChatFormatting.WHITE);
 
@@ -34,13 +36,20 @@ public class LegacyTextFormatter {
             if (!startsWithColorCode(text)) {
                 sb.append(formatStyleChange(currentStyle[0], segmentStyle));
             }
-            sb.append(text.replace(SECTION_SIGN, FORMAT_TAG_SYMBOL));
+            sb.append(escapeText(text).replace(SECTION_SIGN, FORMAT_TAG_SYMBOL));
 
             currentStyle[0] = applyFormattingCodes(segmentStyle, text);
             return Optional.empty();
         }, Style.EMPTY);
 
         return new LegacyText(sb.toString(), unknownColors);
+    }
+
+    // escape text before legacy conversion: color codes are still using '§' here
+    private static String escapeText(String text) {
+        return text
+                .replace(String.valueOf(FORMAT_TAG_SYMBOL), ESCAPE_SYMBOL + FORMAT_TAG_SYMBOL)
+                .replace(NEWLINE_SYMBOL, ESCAPE_SYMBOL + NEWLINE_SYMBOL);
     }
 
     private static boolean startsWithColorCode(String text) {
