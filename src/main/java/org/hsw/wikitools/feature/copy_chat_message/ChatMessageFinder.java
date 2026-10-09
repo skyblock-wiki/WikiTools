@@ -12,7 +12,6 @@ import java.util.List;
 
 public class ChatMessageFinder {
     // mirrors the layout constants of ChatComponent#extractRenderState
-    private static final int CHAT_BOTTOM_MARGIN = 40;
     private static final int CHAT_X_OFFSET = 4;
     private static final int LINE_BACKGROUND_LEFT = -4;
     private static final int LINE_BACKGROUND_RIGHT_PADDING = 8;
@@ -33,7 +32,7 @@ public class ChatMessageFinder {
         float scale = (float) chatAccessor.invokeGetScale();
         int chatWidth = Mth.ceil(chatAccessor.invokeGetWidth() / scale);
         int lineHeight = chatAccessor.invokeGetLineHeight();
-        int chatBottom = Mth.floor((client.getWindow().getGuiScaledHeight() - CHAT_BOTTOM_MARGIN) / scale);
+        int chatBottom = Mth.floor((client.getWindow().getGuiScaledHeight() - ChatComponentAccessor.getBottomMargin()) / scale);
 
         int left = Mth.floor((LINE_BACKGROUND_LEFT + CHAT_X_OFFSET) * scale);
         int right = Mth.ceil((chatWidth + LINE_BACKGROUND_RIGHT_PADDING + CHAT_X_OFFSET) * scale);

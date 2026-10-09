@@ -10,6 +10,11 @@ import java.util.List;
 
 @Mixin(ChatComponent.class)
 public interface ChatComponentAccessor {
+    @Accessor("BOTTOM_MARGIN")
+    static int getBottomMargin() {
+        throw new AssertionError();
+    }
+
     @Accessor("trimmedMessages")
     List<GuiMessage.Line> getTrimmedMessages();
 
